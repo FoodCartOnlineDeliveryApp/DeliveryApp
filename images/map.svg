@@ -1,0 +1,12 @@
+<svg id="map" xmlns="http://www.w3.org/2000/svg" width="13.389" height="15.446" viewBox="0 0 13.389 15.446">
+  <g id="Group_5040" data-name="Group 5040">
+    <g id="Group_5039" data-name="Group 5039" transform="translate(0)">
+      <path id="Path_1029" data-name="Path 1029" d="M40.787,0a6.571,6.571,0,0,0-6.694,6.424c0,4.807,6.142,8.771,6.4,8.937a.541.541,0,0,0,.581,0c.262-.166,6.4-4.13,6.4-8.937A6.57,6.57,0,0,0,40.787,0Zm0,14.251c-1.189-.828-5.611-4.156-5.611-7.827a5.619,5.619,0,0,1,11.223,0C46.4,10.088,41.975,13.422,40.787,14.251Z" transform="translate(-34.093)" fill="#06c168"/>
+    </g>
+  </g>
+  <g id="Group_5042" data-name="Group 5042" transform="translate(3.645 2.941)">
+    <g id="Group_5041" data-name="Group 5041" transform="translate(0)">
+      <path id="Path_1030" data-name="Path 1030" d="M157.965,97.5a3.049,3.049,0,1,0,3.049,3.049A3.053,3.053,0,0,0,157.965,97.5Zm0,5.016a1.967,1.967,0,1,1,1.967-1.967A1.969,1.969,0,0,1,157.965,102.517Z" transform="translate(-154.916 -97.501)" fill="#06c168"/>
+    </g>
+  </g>
+</svg>
