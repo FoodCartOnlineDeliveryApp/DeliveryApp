@@ -14,7 +14,7 @@ import 'package:mealup_driver/model/setting.dart';
 import 'package:retrofit/retrofit.dart';
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: 'Enter_Your_Base_Url/api/driver/')
+@RestApi(baseUrl: 'https://foodcartonline.in/api/driver/')
 // please don't remove "/api/driver".
 abstract class RestClient {
 

@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_downloader/image_downloader.dart';
+// import 'package:image_downloader/image_downloader.dart';
 import 'package:mealup_driver/localization/language/languages.dart';
 import 'package:mealup_driver/util/constants.dart';
 import 'package:mealup_driver/util/preferenceutils.dart';
@@ -35,18 +35,18 @@ class _MyDocument extends State<MyDocument> {
   String _size = "";
   String _mimeType = "";
   File? _imageFile;
-  int _progress = 0;
+  // int _progress = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
     PreferenceUtils.init();
-    ImageDownloader.callback(onProgressUpdate: (String? imageId, int progress) {
-      setState(() {
-        _progress = progress;
-      });
-    });
+    // ImageDownloader.callback(onProgressUpdate: (String? imageId, int progress) {
+    //   setState(() {
+    //     _progress = progress;
+    //   });
+    // });
 
     setState(() {
       lino = PreferenceUtils.getString(Constants.driverlicencenumber);

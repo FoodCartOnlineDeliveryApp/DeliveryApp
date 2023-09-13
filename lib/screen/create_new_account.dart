@@ -377,6 +377,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         .driverRegister(firstname, lastname, email, contactNo, strCountryCode,
             password, address)
         .then((response) {
+          print("response");
+          print(response);
       if (response.success == true) {
         Constants.toastMessage(Languages.of(context)!.registersucesslable);
         setState(() {
@@ -455,33 +457,35 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
       setState(() {
         showSpinner = false;
       });
+print("obj");
+print(obj);
 
       switch (obj.runtimeType) {
         case DioError:
-          final res = (obj as DioError).response!;
+          final res = (obj as DioError).response;
 
-          var responsecode = res.statusCode;
+          var responsecode = res?.statusCode;
 
           if (responsecode == 401) {
             setState(() {
               showSpinner = false;
             });
             print(responsecode);
-            print(res.statusMessage);
+            print(res?.statusMessage);
           } else if (responsecode == 422) {
             setState(() {
               showSpinner = false;
             });
-            if(res.data['errors']['phone'] != null){
-              Constants.createSnackBar(res.data['errors']['phone'][0], this.context,
+            if(res?.data['errors']['phone'] != null){
+              Constants.createSnackBar(res?.data['errors']['phone'][0], this.context,
                   Constants.color_theme);
             }
-            else if (res.data['errors']['email_id'] != null){
-              Constants.createSnackBar(res.data['errors']['email_id'][0], this.context,
+            else if (res?.data['errors']['email_id'] != null){
+              Constants.createSnackBar(res?.data['errors']['email_id'][0], this.context,
                   Constants.color_theme);
             }
             else{
-              Constants.createSnackBar(res.data['message'], this.context,
+              Constants.createSnackBar(res?.data['message'], this.context,
                   Constants.color_theme);
             }
           }
