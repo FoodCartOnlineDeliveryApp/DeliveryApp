@@ -22,6 +22,8 @@ import 'package:mealup_driver/widget/transitions.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+import '../util/fcm_notification.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -302,7 +304,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print(email);
     print(password);
 
-    RestClient(ApiHeader().dioData()).driverLogin(email, password, devicetoken).then((response) {
+    RestClient(ApiHeader().dioData()).driverLogin(email, password, devicetoken).then((response) async {
       final body = json.decode(response);
       if (body['success'] == true) {
         if (mounted) {
@@ -416,6 +418,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           PreferenceUtils.setstatus(Constants.isonline, false);
         }
+        await FCMNotification.addRemoveFCMToken(context,user: body['data']['id'].toString());
         Constants.createSnackBar("Login Successfully", this.context, Constants.color_theme);
 
         if (body['data']['is_verified'] == 1) {

@@ -1,4 +1,4 @@
-package app.saasmonks.mealup.driver
+package com.driver.foodapp
 
 import io.flutter.embedding.android.FlutterActivity
 

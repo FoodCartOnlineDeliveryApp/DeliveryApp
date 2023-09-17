@@ -21,14 +21,14 @@ import 'package:mealup_driver/util/constants.dart';
 import 'package:mealup_driver/util/preferenceutils.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class MyProfile extends StatefulWidget {
+import '../util/fcm_notification.dart';
 
+class MyProfile extends StatefulWidget {
   @override
   _MyProfile createState() => _MyProfile();
 }
 
 class _MyProfile extends State<MyProfile> {
-
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   bool showSpinner = false;
@@ -42,7 +42,6 @@ class _MyProfile extends State<MyProfile> {
 
   @override
   void initState() {
-
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -50,8 +49,7 @@ class _MyProfile extends State<MyProfile> {
     if (mounted) {
       setState(() {
         Constants.currentlatlong()
-            .whenComplete(() => Constants.currentlatlong().then((origin) {
-        }));
+            .whenComplete(() => Constants.currentlatlong().then((origin) {}));
       });
     }
 
@@ -87,9 +85,9 @@ class _MyProfile extends State<MyProfile> {
           email = response.data!.emailId;
           phone = response.data!.contact;
           phonecode = response.data!.phoneCode;
-          if(response.data!.deliveryzone != null){
+          if (response.data!.deliveryzone != null) {
             location = response.data!.deliveryzone;
-          }else{
+          } else {
             location = '';
           }
 
@@ -101,7 +99,8 @@ class _MyProfile extends State<MyProfile> {
               Constants.driverfirstname, response.data!.firstName!);
           PreferenceUtils.setString(
               Constants.driverlastname, response.data!.lastName!);
-          PreferenceUtils.setString(Constants.driverimage, response.data!.image!);
+          PreferenceUtils.setString(
+              Constants.driverimage, response.data!.image!);
           PreferenceUtils.setString(
               Constants.driveremail, response.data!.emailId!);
           PreferenceUtils.setString(
@@ -114,26 +113,28 @@ class _MyProfile extends State<MyProfile> {
               Constants.drivervehiclenumber, response.data!.vehicleNumber!);
           PreferenceUtils.setString(
               Constants.driverlicencenumber, response.data!.licenceNumber!);
-          PreferenceUtils.setString(
-              Constants.drivernationalidentity, response.data!.nationalIdentity!);
+          PreferenceUtils.setString(Constants.drivernationalidentity,
+              response.data!.nationalIdentity!);
           PreferenceUtils.setString(
               Constants.driverlicencedoc, response.data!.licenceDoc!);
-          if(response.data!.deliveryZoneId != null){
+          if (response.data!.deliveryZoneId != null) {
             PreferenceUtils.setString(Constants.driverdeliveryzoneid,
                 response.data!.deliveryZoneId.toString());
-          }else{
+          } else {
             PreferenceUtils.setString(Constants.driverdeliveryzoneid, '');
           }
 
-          if(response.data!.otp != null){
-            PreferenceUtils.setString(Constants.driverotp, response.data!.otp.toString());
-          }else{
+          if (response.data!.otp != null) {
+            PreferenceUtils.setString(
+                Constants.driverotp, response.data!.otp.toString());
+          } else {
             PreferenceUtils.setString(Constants.driverotp, '');
           }
 
-          if(response.data!.deliveryzone != null){
-            PreferenceUtils.setString(Constants.driverzone, response.data!.deliveryzone!);
-          }else{
+          if (response.data!.deliveryzone != null) {
+            PreferenceUtils.setString(
+                Constants.driverzone, response.data!.deliveryzone!);
+          } else {
             PreferenceUtils.setString(Constants.driverzone, '');
           }
 
@@ -164,7 +165,6 @@ class _MyProfile extends State<MyProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     dynamic screenheight = MediaQuery.of(context).size.height;
     dynamic screenwidth = MediaQuery.of(context).size.width;
 
@@ -174,10 +174,10 @@ class _MyProfile extends State<MyProfile> {
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: AssetImage('images/back_img.png'),
-            fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(Constants.bgcolor,BlendMode.color)
-          )),
+                  image: AssetImage('images/back_img.png'),
+                  fit: BoxFit.cover,
+                  colorFilter:
+                      ColorFilter.mode(Constants.bgcolor, BlendMode.color))),
           child: Scaffold(
               backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
@@ -251,31 +251,44 @@ class _MyProfile extends State<MyProfile> {
                                                   child: Container(
                                                     height: 76,
                                                     width: 80,
-                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50)),
                                                     child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(50),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
                                                       child: CachedNetworkImage(
                                                         imageUrl: image == null
                                                             ? "http://ondemandscripts.com/App-Demo/MealUp-76850/public/images/upload/product_default.jpg"
                                                             : image!,
-                                                        width: screenwidth * 0.14,
-                                                        height: screenheight * 0.1,
+                                                        width:
+                                                            screenwidth * 0.14,
+                                                        height:
+                                                            screenheight * 0.1,
                                                         fit: BoxFit.cover,
-                                                        imageBuilder: (context, imageProvider) =>
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
                                                             ClipRRect(
                                                           borderRadius:
-                                                              BorderRadius.circular(50),
+                                                              BorderRadius
+                                                                  .circular(50),
                                                           child: Image(
-                                                            image: imageProvider,
+                                                            image:
+                                                                imageProvider,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
-
-                                                        placeholder: (context,url) =>
+                                                        placeholder: (context,
+                                                                url) =>
                                                             SpinKitFadingCircle(
-                                                                color:Constants.color_theme),
-                                                        errorWidget: (context, url, error) =>
-                                                            Image.asset("images/no_image.png"),
+                                                                color: Constants
+                                                                    .color_theme),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Image.asset(
+                                                                "images/no_image.png"),
                                                       ),
                                                     ),
                                                   ),
@@ -309,7 +322,8 @@ class _MyProfile extends State<MyProfile> {
                                                                 TextOverflow
                                                                     .visible,
                                                             style: TextStyle(
-                                                                color: Constants.whitetext,
+                                                                color: Constants
+                                                                    .whitetext,
                                                                 fontFamily:
                                                                     Constants
                                                                         .app_font_bold,
@@ -334,7 +348,8 @@ class _MyProfile extends State<MyProfile> {
                                                                     .visible,
                                                             maxLines: 1,
                                                             style: TextStyle(
-                                                                color: Constants.greaytext,
+                                                                color: Constants
+                                                                    .greaytext,
                                                                 fontFamily:
                                                                     Constants
                                                                         .app_font,
@@ -371,9 +386,8 @@ class _MyProfile extends State<MyProfile> {
                                                                     .setWidth(
                                                                         100),
                                                                 decoration: new BoxDecoration(
-                                                                    color:
-                                                                        Constants
-                                                                            .bgcolor,
+                                                                    color: Constants
+                                                                        .bgcolor,
                                                                     borderRadius: new BorderRadius
                                                                         .all(const Radius
                                                                             .circular(
@@ -406,7 +420,6 @@ class _MyProfile extends State<MyProfile> {
                                                                               ),
                                                                             ),
                                                                           ),
-
                                                                           WidgetSpan(
                                                                             child:
                                                                                 Container(
@@ -444,8 +457,7 @@ class _MyProfile extends State<MyProfile> {
                                               Languages.of(context)!
                                                   .taptoviewinfolable,
                                               style: (TextStyle(
-                                                  color:
-                                                      Constants.greaytext,
+                                                  color: Constants.greaytext,
                                                   fontFamily:
                                                       Constants.app_font,
                                                   fontSize: 14)),
@@ -517,7 +529,8 @@ class _MyProfile extends State<MyProfile> {
                                                           Languages.of(context)!
                                                               .mydocumentlable,
                                                           style: TextStyle(
-                                                              color: Constants.whitetext,
+                                                              color: Constants
+                                                                  .whitetext,
                                                               fontSize: 18,
                                                               fontFamily:
                                                                   Constants
@@ -542,7 +555,8 @@ class _MyProfile extends State<MyProfile> {
                                                                 TextOverflow
                                                                     .visible,
                                                             style: TextStyle(
-                                                                color: Constants.color_red,
+                                                                color: Constants
+                                                                    .color_red,
                                                                 fontSize: 14,
                                                                 fontFamily:
                                                                     Constants
@@ -609,7 +623,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .historylable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -671,7 +686,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .mycachebalancelable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -733,7 +749,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .earninghistorylable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -795,7 +812,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .changepasswordlable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -856,7 +874,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .faqlable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -909,7 +928,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .changemylanguagelable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -932,30 +952,55 @@ class _MyProfile extends State<MyProfile> {
                                           ),
                                         ),
                                         InkWell(
-                                          onTap: () {
+                                          onTap: () async {
+                                            await FCMNotification
+                                                .addRemoveFCMToken(context,
+                                                    processType: 0);
 
-                                            PreferenceUtils.remove(Constants.driverfirstname);
-                                            PreferenceUtils.remove(Constants.driverlastname);
-                                            PreferenceUtils.remove(Constants.driverid);
-                                            PreferenceUtils.remove(Constants.headertoken);
-                                            PreferenceUtils.remove(Constants.driveremail);
-                                            PreferenceUtils.remove(Constants.driverphone);
-                                            PreferenceUtils.remove(Constants.driverotp);
-                                            PreferenceUtils.remove(Constants.driverimage);
-                                            PreferenceUtils.remove(Constants.driverphonecode);
-                                            PreferenceUtils.remove(Constants.imagePath);
-                                            PreferenceUtils.remove(Constants.isLoggedIn);
-                                            PreferenceUtils.remove(Constants.isonline);
-                                            PreferenceUtils.remove(Constants.isverified);
-                                            PreferenceUtils.remove(Constants.drivervehicletype);
-                                            PreferenceUtils.remove(Constants.drivervehiclenumber);
-                                            PreferenceUtils.remove(Constants.driverlicencenumber);
-                                            PreferenceUtils.remove(Constants.drivernationalidentity);
-                                            PreferenceUtils.remove(Constants.driverlicencedoc);
-                                            PreferenceUtils.remove(Constants.driverdeliveryzoneid);
-                                            PreferenceUtils.remove(Constants.drivernotification);
-                                            PreferenceUtils.remove(Constants.driverzone);
-                                            PreferenceUtils.remove(Constants.driverdevicetoken);
+                                            PreferenceUtils.remove(
+                                                Constants.driverfirstname);
+                                            PreferenceUtils.remove(
+                                                Constants.driverlastname);
+                                            PreferenceUtils.remove(
+                                                Constants.driverid);
+                                            PreferenceUtils.remove(
+                                                Constants.headertoken);
+                                            PreferenceUtils.remove(
+                                                Constants.driveremail);
+                                            PreferenceUtils.remove(
+                                                Constants.driverphone);
+                                            PreferenceUtils.remove(
+                                                Constants.driverotp);
+                                            PreferenceUtils.remove(
+                                                Constants.driverimage);
+                                            PreferenceUtils.remove(
+                                                Constants.driverphonecode);
+                                            PreferenceUtils.remove(
+                                                Constants.imagePath);
+                                            PreferenceUtils.remove(
+                                                Constants.isLoggedIn);
+                                            PreferenceUtils.remove(
+                                                Constants.isonline);
+                                            PreferenceUtils.remove(
+                                                Constants.isverified);
+                                            PreferenceUtils.remove(
+                                                Constants.drivervehicletype);
+                                            PreferenceUtils.remove(
+                                                Constants.drivervehiclenumber);
+                                            PreferenceUtils.remove(
+                                                Constants.driverlicencenumber);
+                                            PreferenceUtils.remove(Constants
+                                                .drivernationalidentity);
+                                            PreferenceUtils.remove(
+                                                Constants.driverlicencedoc);
+                                            PreferenceUtils.remove(
+                                                Constants.driverdeliveryzoneid);
+                                            PreferenceUtils.remove(
+                                                Constants.drivernotification);
+                                            PreferenceUtils.remove(
+                                                Constants.driverzone);
+                                            PreferenceUtils.remove(
+                                                Constants.driverdevicetoken);
 
                                             PreferenceUtils.setlogin(
                                                 Constants.isLoggedIn, false);
@@ -992,7 +1037,8 @@ class _MyProfile extends State<MyProfile> {
                                                     Languages.of(context)!
                                                         .logoutlable,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontSize: 18,
                                                         fontFamily:
                                                             Constants.app_font),
@@ -1023,8 +1069,7 @@ class _MyProfile extends State<MyProfile> {
                                           child: Text(
                                             Languages.of(context)!.versionlable,
                                             style: TextStyle(
-                                                color:
-                                                    Constants.whitetext,
+                                                color: Constants.whitetext,
                                                 fontFamily: Constants.app_font,
                                                 fontSize: 14),
                                           ),
@@ -1045,12 +1090,11 @@ class _MyProfile extends State<MyProfile> {
     );
   }
 
-  Future<bool> _onWillPop() async{
+  Future<bool> _onWillPop() async {
     return true;
   }
 
   void OpenshowprofileBottomSheet() {
-
     dynamic screenwidth = MediaQuery.of(context).size.width;
     dynamic screenheight = MediaQuery.of(context).size.height;
 
@@ -1094,9 +1138,12 @@ class _MyProfile extends State<MyProfile> {
                                           child: Container(
                                             height: 76,
                                             width: 80,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50)),
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(50),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
                                               child: CachedNetworkImage(
                                                 imageUrl: image == null
                                                     ? "http://ondemandscripts.com/App-Demo/MealUp-76850/public/images/upload/product_default.jpg"
@@ -1109,13 +1156,14 @@ class _MyProfile extends State<MyProfile> {
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Image(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.cover,
-                                                        ),
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                ),
 
                                                 placeholder: (context, url) =>
                                                     SpinKitFadingCircle(
-                                                        color: Constants.color_theme),
+                                                        color: Constants
+                                                            .color_theme),
                                                 errorWidget: (context, url,
                                                         error) =>
                                                     Image.asset(
@@ -1149,7 +1197,8 @@ class _MyProfile extends State<MyProfile> {
                                                     overflow:
                                                         TextOverflow.visible,
                                                     style: TextStyle(
-                                                        color: Constants.whitetext,
+                                                        color:
+                                                            Constants.whitetext,
                                                         fontFamily: Constants
                                                             .app_font_bold,
                                                         fontSize: 16),
@@ -1169,8 +1218,8 @@ class _MyProfile extends State<MyProfile> {
                                                         TextOverflow.visible,
                                                     maxLines: 1,
                                                     style: TextStyle(
-                                                        color: Constants
-                                                            .greaytext,
+                                                        color:
+                                                            Constants.greaytext,
                                                         fontFamily:
                                                             Constants.app_font,
                                                         fontSize: 14),
@@ -1198,9 +1247,8 @@ class _MyProfile extends State<MyProfile> {
                                                         width: ScreenUtil()
                                                             .setWidth(100),
                                                         decoration: new BoxDecoration(
-                                                            color:
-                                                                Constants
-                                                                    .bgcolor,
+                                                            color: Constants
+                                                                .bgcolor,
                                                             borderRadius:
                                                                 new BorderRadius
                                                                         .all(

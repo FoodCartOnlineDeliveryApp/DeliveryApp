@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.saasmonks.mealup.driver">
+    package="com.driver.foodapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -47,6 +47,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <meta-data android:name="com.google.android.geo.API_KEY" android:value="ENTER_YOUR_GOOGLE_ANDROID_KEY"/>
+       <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBQFSSzQbEbSyiJEntQzGMSJltW_gBXhxM"/>
+       <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="high_importance_channel" />
     </application>
 </manifest>

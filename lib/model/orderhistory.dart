@@ -177,7 +177,7 @@ class User {
   String? name;
   String? image;
   String? emailId;
-  Null emailVerifiedAt;
+  String? emailVerifiedAt;
   String? deviceToken;
   String? phone;
   int? isVerified;

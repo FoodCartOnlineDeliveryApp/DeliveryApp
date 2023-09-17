@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
@@ -17,14 +20,117 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'localization/locale_constant.dart';
 import 'localization/localizations_delegate.dart';
 
-void main() {
+//Firebase Notification initialization
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+  print('Message map: ${message.toMap()}');
+}
+
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.black, // status bar color
   ));
   PreferenceUtils.init();
   HttpOverrides.global = MyHttpOverrides();
+//Firebase Notification initialization
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+        apiKey: 'AIzaSyCHI5EEBZQWNQ_mVxuxO4RAtQacZ1drBcE',
+        appId: '1:849512019728:android:42cd5e7389207f82961795',
+        messagingSenderId: '849512019728',
+        projectId: 'foodcartdeliveryapp'),
+  );
 
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // final fcmToken = await messaging.getToken();
+  // print('fcmToken:= $fcmToken');
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    print('Message map: ${message.toMap()}');
+    print("onMessageOpenedApp: ${message.data}");
+
+    // if (message.data["navigation"] == "/your_route") {
+    //   int _yourId = int.tryParse(message.data["id"]) ?? 0;
+    //   Navigator.push(navigatorKey.currentState!.context,
+    //       MaterialPageRoute(builder: (context) => Staff(isActionBar: true)));
+    // }
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('User granted permission: ${settings.authorizationStatus}');
+
+  ///Managing local notification///
+  final notificationSound = 'sound.mp3';
+  AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description: 'This channel is used for important notifications.',
+      importance: Importance.max,
+      // playSound: true,
+      sound: RawResourceAndroidNotificationSound(
+          notificationSound.split('.').first));
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.initialize(
+    InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    //      onSelectNotification: (payload) async {
+    //   print("onMessageOpenedAppLocal: $payload");
+
+    // }
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  ///End of managing local notification///
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message map: ${message.toMap()}');
+    print('Message data: ${message.data}');
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null && android != null) {
+      print('Message also contained a notification: ${message.notification}');
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(channel.id, channel.name,
+              channelDescription: channel.description,
+              icon: '@mipmap/ic_launcher',
+              priority: Priority.high,
+              sound: RawResourceAndroidNotificationSound(
+                  notificationSound.split('.').first)
+              // other properties...
+              ),
+        ),
+        // payload: message.notification.title
+        //         .contains("Do you want to confirm your booking")
+        //     ? "confirm" + message.data['booking']
+        //     : message.data['booking']
+      );
+    }
+  });
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
     home: new MyApp(),

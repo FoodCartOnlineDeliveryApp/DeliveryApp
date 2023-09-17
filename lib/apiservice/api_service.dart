@@ -167,4 +167,6 @@ abstract class RestClient {
     @Field() String password_confirmation,
     @Field() String user_id,
   );
+  @POST("firebase/token")
+  Future<Map<String, dynamic>> addRemoveFCMToken(@Body() Map<String, dynamic> map);
 }

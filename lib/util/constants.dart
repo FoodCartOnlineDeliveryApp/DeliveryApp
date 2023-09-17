@@ -9,7 +9,7 @@ import 'package:mealup_driver/util/preferenceutils.dart';
 
 class Constants {
 
-  static final String androidKey = 'ENTER_YOUR_GOOGLE_ANDROID_KEY';
+  static final String androidKey = 'AIzaSyBQFSSzQbEbSyiJEntQzGMSJltW_gBXhxM';
   static final String iosKey = 'Enter_Your_iOS_GoogleMap_Key';
 
   static Color color_black = Color(0xFF090E21);

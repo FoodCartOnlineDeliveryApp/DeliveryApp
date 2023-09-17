@@ -164,7 +164,8 @@ class User {
   String? name;
   String? image;
   String? emailId;
-  Null emailVerifiedAt;
+  String? emailVerifiedAt;
+  // Null emailVerifiedAt;
   String? phone;
   int? isVerified;
   int? status;
