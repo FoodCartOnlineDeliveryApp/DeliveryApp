@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class DeviceUtils {
+import '../apiservice/ApiHeader.dart';
+import '../apiservice/api_service.dart';
+import 'constants.dart';
 
+class DeviceUtils {
   static hideDialog(BuildContext context) {
     Navigator.pop(context);
   }
-    static onLoading(BuildContext context) {
+
+  static onLoading(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -29,4 +33,14 @@ class DeviceUtils {
     );
   }
 
+  static updateDriverLocation() async {
+    final position = await Constants.currentlatlong();
+    final currentLat = position!.latitude;
+    final currentLong = position.longitude;
+    // print("currentLat $currentLat && currentLong $currentLong");
+    // final res =
+      await RestClient(ApiHeader().dioData())
+        .driveUpdateLatLong(currentLat.toString(), currentLong.toString());
+        // print(res);
+  }
 }

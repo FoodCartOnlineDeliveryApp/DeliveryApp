@@ -15,6 +15,7 @@ import 'package:mealup_driver/screen/homescreen.dart';
 import 'package:mealup_driver/screen/login_screen.dart';
 import 'package:mealup_driver/screen/selectlocationscreen.dart';
 import 'package:mealup_driver/util/constants.dart';
+import 'package:mealup_driver/util/device_utils.dart';
 import 'package:mealup_driver/util/preferenceutils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'localization/locale_constant.dart';
@@ -30,7 +31,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Message map: ${message.toMap()}');
 }
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.black, // status bar color
@@ -131,6 +132,14 @@ void main() async{
       );
     }
   });
+
+  if (PreferenceUtils.getBool(Constants.isLoggedIn) == true) {
+    print("The user is in logged in state");
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      DeviceUtils.updateDriverLocation();
+    });
+  }
+
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
     home: new MyApp(),
@@ -138,7 +147,6 @@ void main() async{
       Locale('en', ''),
       Locale('es', ''),
       Locale('ar', ''),
-
     ],
     localizationsDelegates: [
       AppLocalizationsDelegate(),
@@ -158,16 +166,16 @@ void main() async{
   ));
 }
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
 class MyApp extends StatefulWidget {
-
   static void setLocale(BuildContext context, Locale newLocale) {
     var state = context.findAncestorStateOfType<_MyAppState>()!;
     state.setLocale(newLocale);
@@ -215,7 +223,11 @@ class _MyAppState extends State<MyApp> {
       title: 'Multi Language',
       locale: _locale,
       home: SplashScreen(),
-      supportedLocales: [Locale('en', ''), Locale('es', ''), Locale('ar', ''),],
+      supportedLocales: [
+        Locale('en', ''),
+        Locale('es', ''),
+        Locale('ar', ''),
+      ],
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -241,27 +253,33 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   startTime() async {
     var _duration = new Duration(seconds: 2);
     return new Timer(_duration, navigationPage);
   }
 
   void navigationPage() {
-
     if (PreferenceUtils.getlogin(Constants.isLoggedIn) == true) {
       if (PreferenceUtils.getverify(Constants.isverified) == true) {
-        if (PreferenceUtils.getString(Constants.driverdeliveryzoneid).toString() == "0") {
+        if (PreferenceUtils.getString(Constants.driverdeliveryzoneid)
+                .toString() ==
+            "0") {
           print("doc true");
           // go to set location screen
-          Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (context) => SelectLocation()), (route) => false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => SelectLocation()),
+              (route) => false);
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => SelectLocation()),
           // );
         } else {
           // go to home screen
-          Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (context) => HomeScreen(0)), (route) => false);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen(0)),
+              (route) => false);
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => HomeScreen(0)),
@@ -269,12 +287,18 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       } else {
         //go to verify
-        Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+            (route) => false);
         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => new LoginScreen()));
       }
     } else {
       // go to login
-      Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (route) => false);
       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => new LoginScreen()));
     }
   }
@@ -284,66 +308,59 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
     PreferenceUtils.init();
-    PreferenceUtils.getBool(Constants.disclaimer) == true ? checkforpermission() : startTime();
+    PreferenceUtils.getBool(Constants.disclaimer) == true
+        ? checkforpermission()
+        : startTime();
   }
 
   void checkforpermission() async {
     final Location location = Location();
     PermissionStatus _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
-
       _permissionGranted = await location.requestPermission();
-    } else if (_permissionGranted == PermissionStatus.granted){
-        startTime();
-        return ;
+    } else if (_permissionGranted == PermissionStatus.granted) {
+      startTime();
+      return;
     }
-    Constants.currentlatlong().whenComplete(() =>
-        Constants.currentlatlong().then((value) {
-          print("origin123:$value");
-          startTime();
-        }));
+    Constants.currentlatlong()
+        .whenComplete(() => Constants.currentlatlong().then((value) {
+              print("origin123:$value");
+              startTime();
+            }));
   }
 
   @override
   Widget build(BuildContext context) {
+    dynamic screenheight = MediaQuery.of(context).size.height;
 
-    dynamic screenheight = MediaQuery
-        .of(context)
-        .size
-        .height;
-
-    dynamic screenwidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    dynamic screenwidth = MediaQuery.of(context).size.width;
 
     return ScreenUtilInit(
       designSize: Size(360, 690),
-      builder: (BuildContext context,child) =>
-          MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: new SafeArea(
-              child: Scaffold(
-                body: new Container(
-                  width: screenwidth,
-                  height: screenheight,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('images/back_img.png'),
-                        fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(Constants.bgcolor,BlendMode.color)
-                      )),
-                  alignment: Alignment.center,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      "images/splash_logo.png",
-                    ),
-                  ),
+      builder: (BuildContext context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: new SafeArea(
+          child: Scaffold(
+            body: new Container(
+              width: screenwidth,
+              height: screenheight,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/back_img.png'),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                          Constants.bgcolor, BlendMode.color))),
+              alignment: Alignment.center,
+              child: Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  "images/splash_logo.png",
                 ),
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 
@@ -414,5 +431,4 @@ class _SplashScreenState extends State<SplashScreen> {
   //       }
   //   });
   // }
-
 }
