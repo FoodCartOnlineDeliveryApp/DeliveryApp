@@ -133,12 +133,12 @@ void main() async {
     }
   });
 
-  if (PreferenceUtils.getBool(Constants.isLoggedIn) == true) {
-    print("The user is in logged in state");
-    Timer.periodic(Duration(seconds: 30), (timer) {
+  Timer.periodic(Duration(seconds: 30), (timer) {
+    if (PreferenceUtils.getBool(Constants.isLoggedIn) == true) {
+      // print("The user is in logged in state");
       DeviceUtils.updateDriverLocation();
-    });
-  }
+    }
+  });
 
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
