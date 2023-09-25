@@ -24,7 +24,6 @@ class GetOrderKitchen extends StatefulWidget {
 }
 
 class _GetOrderKitchen extends State<GetOrderKitchen> {
-
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   double heigntValue = 300;
   bool full = true;
@@ -48,10 +47,10 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
   int second = 5;
 
   double? driver_lat = 0.0;
-  double? driver_lang= 0.0;
+  double? driver_lang = 0.0;
 
   late double vendor_lat = 0.0;
-  late double vendor_lang = 0.0 ;
+  late double vendor_lang = 0.0;
   late String cancel_reason;
   final _text_cancel_reason_controller = TextEditingController();
 
@@ -65,15 +64,16 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
 
   late LocationData currentLocation;
   Location? location;
- double CAMERA_ZOOM = 14.4746;
- double CAMERA_TILT = 80;
- double CAMERA_BEARING = 30;
+  double CAMERA_ZOOM = 14.4746;
+  double CAMERA_TILT = 80;
+  double CAMERA_BEARING = 30;
 
   @override
   void initState() {
     super.initState();
 
-    second = int.parse(PreferenceUtils.getString(Constants.driver_auto_refrese));
+    second =
+        int.parse(PreferenceUtils.getString(Constants.driver_auto_refrese));
 
     location = new Location();
     WidgetsFlutterBinding.ensureInitialized();
@@ -97,9 +97,12 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
       setState(() {
         driver_lat = Constants.currentlat;
         driver_lang = Constants.currentlong;
-        if(PreferenceUtils.getString(Constants.previos_order_vendor_lat) != ''){
-          vendor_lat = double.parse(PreferenceUtils.getString(Constants.previos_order_vendor_lat));
-          vendor_lang = double.parse(PreferenceUtils.getString(Constants.previos_order_vendor_lang));
+        if (PreferenceUtils.getString(Constants.previos_order_vendor_lat) !=
+            '') {
+          vendor_lat = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_vendor_lat));
+          vendor_lang = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_vendor_lang));
         }
         assert(vendor_lat is double);
         assert(vendor_lang is double);
@@ -107,21 +110,21 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
         /// origin marker
         /// // make sure to initialize before map loading
         BitmapDescriptor customIcon;
-         BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(12, 12)),
-                 'images/driver_map_image_7.png')
+        BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(12, 12)),
+                'images/driver_map_image_7.png')
             .then((d) {
-           customIcon = d;
-           addMarker(LatLng(driver_lat!, driver_lang!), "origin", customIcon);
-         });
-
+          customIcon = d;
+          addMarker(LatLng(driver_lat!, driver_lang!), "origin", customIcon);
+        });
 
         /// destination marker
         BitmapDescriptor customIcon1;
         BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(12, 12)),
-            'images/food_map_image_4.png')
+                'images/food_map_image_4.png')
             .then((d) {
           customIcon1 = d;
-          addMarker(LatLng(vendor_lat, vendor_lang), "destination", customIcon1);
+          addMarker(
+              LatLng(vendor_lat, vendor_lang), "destination", customIcon1);
         });
 
         Constants.CheckNetwork().whenComplete(
@@ -130,8 +133,7 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                   PostDriverLocation(driver_lat, driver_lang);
                 }));
       });
-    } else {
-    }
+    } else {}
 
     PreferenceUtils.init();
 
@@ -139,8 +141,10 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
       setState(() {
         id = PreferenceUtils.getString(Constants.previos_order_id);
         orderId = PreferenceUtils.getString(Constants.previos_order_orderid);
-        vendorname = PreferenceUtils.getString(Constants.previos_order_vendor_name);
-        vendorAddress = PreferenceUtils.getString(Constants.previos_order_vendor_address);
+        vendorname =
+            PreferenceUtils.getString(Constants.previos_order_vendor_name);
+        vendorAddress =
+            PreferenceUtils.getString(Constants.previos_order_vendor_address);
         distance = PreferenceUtils.getString(Constants.previos_order_distance);
 
         if (Constants.currentaddress != "0") {
@@ -168,7 +172,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
   }
 
   updatePinOnMap() async {
-
     CameraPosition cPosition = CameraPosition(
       zoom: CAMERA_ZOOM,
       tilt: CAMERA_TILT,
@@ -178,40 +181,40 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
 
-    final marker = markers.values.toList().firstWhere((item) => item.markerId == MarkerId('origin'));
+    final marker = markers.values
+        .toList()
+        .firstWhere((item) => item.markerId == MarkerId('origin'));
 
-      Marker _marker = Marker(
-        markerId: marker.markerId,
-        position: LatLng(currentLocation.latitude!, currentLocation.longitude!),
-        icon: marker.icon,
-      );
+    Marker _marker = Marker(
+      markerId: marker.markerId,
+      position: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+      icon: marker.icon,
+    );
 
-      setState(() {
-        markers[MarkerId('origin')] = _marker;
-      });
+    setState(() {
+      markers[MarkerId('origin')] = _marker;
+    });
   }
 
   _getCurrentLocation() {
     Constants.currentlatlong().then((value) {
-         setState(() {
+      if (mounted) {
+        setState(() {
           driver_lat = value!.latitude;
           driver_lang = value.longitude;
         });
-
+      }
     });
   }
 
-
   void PostDriverLocation(double? currentlat, double? currentlang) {
-
     RestClient(ApiHeader().dioData())
         .driveUpdateLatLong(currentlat.toString(), currentlang.toString())
         .then((response) {
       final body = json.decode(response!);
       bool? sucess = body['success'];
       if (sucess = true) {
-      } else if (sucess == false) {
-      }
+      } else if (sucess == false) {}
     }).catchError((Object obj) {
       final snackBar = SnackBar(
         content: Text(Languages.of(context)!.servererrorlable),
@@ -225,7 +228,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
   }
 
   void CallApiForPickUporder(BuildContext context) {
-
     setState(() {
       showSpinner = true;
     });
@@ -234,7 +236,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
       RestClient(ApiHeader().dioData())
           .orderStatusChange1(id, "PICKUP")
           .then((response) {
-
         final body = json.decode(response!);
         bool? sucess = body['success'];
         if (sucess = true) {
@@ -248,7 +249,9 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
             timer?.cancel();
           });
 
-          Navigator.of(this.context).push(MaterialPageRoute(builder: (context) => PickUpOrder(),));
+          Navigator.of(this.context).push(MaterialPageRoute(
+            builder: (context) => PickUpOrder(),
+          ));
         } else if (sucess == false) {
           setState(() {
             showSpinner = false;
@@ -273,7 +276,8 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
     }
   }
 
-  void CallApiForCacelorder(String? id, String? cancelReason, BuildContext context) {
+  void CallApiForCacelorder(
+      String? id, String? cancelReason, BuildContext context) {
     print(id);
 
     setState(() {
@@ -284,7 +288,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
       RestClient(ApiHeader().dioData())
           .cancelOrder(id, "CANCEL", cancelReason)
           .then((response) {
-
         final body = json.decode(response!);
         bool? sucess = body['success'];
         if (sucess = true) {
@@ -296,9 +299,11 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
 
           if (mounted) {
             setState(() {
-              PreferenceUtils.setString(Constants.previos_order_status, "CANCEL");
+              PreferenceUtils.setString(
+                  Constants.previos_order_status, "CANCEL");
               timer?.cancel();
-              Navigator.of(this.context).push(MaterialPageRoute(builder: (context) => HomeScreen(0)));
+              Navigator.of(this.context)
+                  .push(MaterialPageRoute(builder: (context) => HomeScreen(0)));
             });
           }
         } else if (sucess == false) {
@@ -326,7 +331,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
 
   @override
   Widget build(BuildContext context) {
-
     dynamic screenheight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
@@ -366,7 +370,8 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                       child: GoogleMap(
                                           mapType: MapType.normal,
                                           initialCameraPosition: CameraPosition(
-                                            target: LatLng(driver_lat!, driver_lang!),
+                                            target: LatLng(
+                                                driver_lat!, driver_lang!),
                                             zoom: CAMERA_ZOOM,
                                           ),
                                           myLocationEnabled: true,
@@ -374,8 +379,10 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                           compassEnabled: true,
                                           scrollGesturesEnabled: true,
                                           zoomGesturesEnabled: true,
-                                          markers: Set<Marker>.of(markers.values),
-                                          polylines: Set<Polyline>.of(polylines.values),
+                                          markers:
+                                              Set<Marker>.of(markers.values),
+                                          polylines: Set<Polyline>.of(
+                                              polylines.values),
                                           onMapCreated: onMapCreated),
                                     ),
                                   ],
@@ -417,14 +424,16 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 alignment: Alignment.topLeft,
                                                 child: Text(
-                                                  Languages.of(context)!.oidlable +
+                                                  Languages.of(context)!
+                                                          .oidlable +
                                                       "   " +
-                                                      orderId ,
+                                                      orderId,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 18,
@@ -433,18 +442,18 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Icon(Icons.call,color: Colors.white),
+                                                  Icon(Icons.call,
+                                                      color: Colors.white),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                      PreferenceUtils.getString(Constants.user_phone_no),
+                                                      PreferenceUtils.getString(
+                                                          Constants
+                                                              .user_phone_no),
                                                       style: TextStyle(
-                                                          color:
-                                                          Constants
+                                                          color: Constants
                                                               .whitetext,
-                                                          fontSize:
-                                                          16,
-                                                          fontFamily:
-                                                          Constants
+                                                          fontSize: 16,
+                                                          fontFamily: Constants
                                                               .app_font_bold)),
                                                 ],
                                               ),
@@ -471,7 +480,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                         height: ScreenUtil().setHeight(150),
                                         margin: EdgeInsets.only(top: 20),
                                         child: ListView.builder(
-
                                             itemCount: 2,
                                             itemBuilder: (con, index) {
                                               double linetop = 0;
@@ -489,8 +497,7 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                                 linetop = -30.0;
                                                 dottop = -42.0;
                                                 statustop = -35.0;
-                                                color =
-                                                    Constants.color_theme;
+                                                color = Constants.color_theme;
                                                 dotcolor =
                                                     Constants.color_theme;
                                               }
@@ -566,7 +573,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                                                         20.0,
                                                                         statustop,
                                                                         0.0),
-
                                                                 child: ListView(
                                                                   shrinkWrap:
                                                                       true,
@@ -608,7 +614,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-
                                                                                 WidgetSpan(
                                                                                   child: Container(
                                                                                     margin: EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 5),
@@ -622,7 +627,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                                                                     ),
                                                                                   ),
                                                                                 ),
-
                                                                               ],
                                                                             ),
                                                                           ),
@@ -676,27 +680,27 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                                                 NeverScrollableScrollPhysics(),
                                                             children: [
                                                               Text(
-                                                                  Languages.of(
-                                                                          context)!
+                                                                  Languages
+                                                                          .of(
+                                                                              context)!
                                                                       .yourlocationlable,
                                                                   style: TextStyle(
-                                                                      color:
-                                                                          Constants
-                                                                              .whitetext,
+                                                                      color: Constants
+                                                                          .whitetext,
                                                                       fontSize:
                                                                           16,
                                                                       fontFamily:
                                                                           Constants
                                                                               .app_font_bold)),
-                                                              Text(driver_address,
+                                                              Text(
+                                                                  driver_address,
                                                                   maxLines: 3,
                                                                   overflow:
                                                                       TextOverflow
                                                                           .visible,
                                                                   style: TextStyle(
-                                                                      color:
-                                                                          Constants
-                                                                              .whitetext,
+                                                                      color: Constants
+                                                                          .whitetext,
                                                                       fontSize:
                                                                           12,
                                                                       fontFamily:
@@ -768,7 +772,8 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                           onTap: () {
                                             Constants.CheckNetwork()
                                                 .whenComplete(() =>
-                                                    CallApiForPickUporder(context));
+                                                    CallApiForPickUporder(
+                                                        context));
                                           },
                                           child: Container(
                                               margin: EdgeInsets.only(
@@ -776,20 +781,20 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(0.0),
-                                                color:
-                                                    Constants.color_theme,
-                                                boxShadow: [BoxShadow(
+                                                color: Constants.color_theme,
+                                                boxShadow: [
+                                                  BoxShadow(
                                                     color: Colors.grey,
                                                     offset: Offset(
                                                         0.0, 0.0), //(x,y)
                                                     blurRadius: 0.0,
-                                                  ),],
+                                                  ),
+                                                ],
                                               ),
                                               height: screenheight * 0.08,
                                               child: Center(
                                                 child: Container(
-                                                  color:
-                                                      Constants.color_theme,
+                                                  color: Constants.color_theme,
                                                   child: Text(
                                                     Languages.of(context)!
                                                         .pickupanddeliverlable,
@@ -818,15 +823,13 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
     );
   }
 
-  Future<bool> _onWillPop() async{
+  Future<bool> _onWillPop() async {
     return true;
   }
 
   void _OpenCancelBottomSheet(String? id, BuildContext context12) {
-
     dynamic screenwidth = MediaQuery.of(context).size.width;
     dynamic screenheight = MediaQuery.of(context).size.height;
-
 
     showModalBottomSheet(
         context: context,
@@ -949,13 +952,14 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
                       ),
                       InkWell(
                         onTap: () {
-
                           if (_cancelReason == "0") {
                             Constants.toastMessage(
                                 Languages.of(context)!.selectcancelreasonlable);
                           } else if (_cancelReason ==
                               Languages.of(context)!.otherreasonlable) {
-                            if (_text_cancel_reason_controller.text.trim().length ==
+                            if (_text_cancel_reason_controller.text
+                                    .trim()
+                                    .length ==
                                 0) {
                               Constants.toastMessage(
                                   Languages.of(context)!.addreasonlable);
@@ -1018,24 +1022,26 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
   addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
     MarkerId markerId = MarkerId(id);
     Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
+        Marker(markerId: markerId, icon: descriptor, position: position);
     markers[markerId] = marker;
   }
 
   void onMapCreated(GoogleMapController googleMapController) {
-
     check().then((intenet) async {
       if (intenet) {
         setState(() {
           showSpinner = true;
         });
 
-        try{
+        try {
           _controller.complete(googleMapController);
 
           PolylinePoints polylinePoints = PolylinePoints();
-          PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(Constants.androidKey,
-              PointLatLng(driver_lat!, driver_lang!), PointLatLng(vendor_lat, vendor_lang));
+          PolylineResult result =
+              await polylinePoints.getRouteBetweenCoordinates(
+                  Constants.androidKey,
+                  PointLatLng(driver_lat!, driver_lang!),
+                  PointLatLng(vendor_lat, vendor_lang));
           print(result.points);
           if (result.points.isNotEmpty) {
             result.points.forEach((PointLatLng point) {
@@ -1047,7 +1053,7 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
           Polyline polyline = Polyline(
               polylineId: id, color: Colors.green, points: polylineCoordinates);
           polylines[id] = polyline;
-        }catch (e){
+        } catch (e) {
           print(e.toString());
         }
 
@@ -1088,7 +1094,6 @@ class _GetOrderKitchen extends State<GetOrderKitchen> {
     }
     return false;
   }
-
 }
 
 class Body extends StatelessWidget {
@@ -1100,8 +1105,7 @@ class Body extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
           child: GestureDetector(
-        onTap: () {
-        },
+        onTap: () {},
         child: Row(
           children: [
             Expanded(

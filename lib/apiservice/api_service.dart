@@ -169,4 +169,7 @@ abstract class RestClient {
   );
   @POST("firebase/token")
   Future<Map<String, dynamic>> addRemoveFCMToken(@Body() Map<String, dynamic> map);
+  
+  @POST("auto_reject_order")
+  Future<Map<String, dynamic>> autoRejectOrder(@Body() Map<String, dynamic> map);
 }
