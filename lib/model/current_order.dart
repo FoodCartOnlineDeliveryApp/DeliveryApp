@@ -1,22 +1,27 @@
 class CurrentOrder {
   CurrentOrder({
-      bool? success,
-    CurrentOrderData? data,}){
+    bool? success,
+    CurrentOrderData? data,
+  }) {
     _success = success;
     _data = data;
-}
+  }
 
   CurrentOrder.fromJson(dynamic json) {
     _success = json['success'];
-    _data = json['data'] != null ? CurrentOrderData.fromJson(json['data']) : null;
+    _data =
+        json['data'] != null ? CurrentOrderData.fromJson(json['data']) : null;
   }
   bool? _success;
   CurrentOrderData? _data;
-CurrentOrder copyWith({  bool? success,
-  CurrentOrderData? data,
-}) => CurrentOrder(  success: success ?? _success,
-  data: data ?? _data,
-);
+  CurrentOrder copyWith({
+    bool? success,
+    CurrentOrderData? data,
+  }) =>
+      CurrentOrder(
+        success: success ?? _success,
+        data: data ?? _data,
+      );
   bool? get success => _success;
   CurrentOrderData? get data => _data;
 
@@ -28,44 +33,44 @@ CurrentOrder copyWith({  bool? success,
     }
     return map;
   }
-
 }
 
 class CurrentOrderData {
   CurrentOrderData({
-      int? id, 
-      String? orderId, 
-      int? vendorId, 
-      int? userId, 
-      int? deliveryPersonId, 
-      String? date, 
-      String? time, 
-      String? paymentType, 
-      String? paymentToken, 
-      String? paymentStatus, 
-      dynamic amount,
-      dynamic adminCommission,
-      dynamic vendorAmount,
-      String? deliveryType, 
-      dynamic promocodeId, 
-      int? promocodePrice, 
-      dynamic vendorDiscountId, 
-      dynamic vendorDiscountPrice, 
-      int? addressId, 
-      int? deliveryCharge, 
-      String? orderStatus, 
-      dynamic cancelBy, 
-      dynamic cancelReason, 
-      String? tax, 
-      String? orderStartTime, 
-      String? orderEndTime, 
-      dynamic vendorPendingAmount,
-      String? createdAt, 
-      String? updatedAt, 
-      Vendor? vendor, 
-      User? user, 
-      List<OrderItems>? orderItems, 
-      UserAddress? userAddress,}){
+    int? id,
+    String? orderId,
+    int? vendorId,
+    int? userId,
+    int? deliveryPersonId,
+    String? date,
+    String? time,
+    String? paymentType,
+    String? paymentToken,
+    String? paymentStatus,
+    dynamic amount,
+    dynamic adminCommission,
+    dynamic vendorAmount,
+    String? deliveryType,
+    dynamic promocodeId,
+    int? promocodePrice,
+    dynamic vendorDiscountId,
+    dynamic vendorDiscountPrice,
+    int? addressId,
+    int? deliveryCharge,
+    String? orderStatus,
+    dynamic cancelBy,
+    dynamic cancelReason,
+    String? tax,
+    String? orderStartTime,
+    String? orderEndTime,
+    dynamic vendorPendingAmount,
+    String? createdAt,
+    String? updatedAt,
+    Vendor? vendor,
+    User? user,
+    List<OrderItems>? orderItems,
+    UserAddress? userAddress,
+  }) {
     _id = id;
     _orderId = orderId;
     _vendorId = vendorId;
@@ -99,7 +104,7 @@ class CurrentOrderData {
     _user = user;
     _orderItems = orderItems;
     _userAddress = userAddress;
-}
+  }
 
   CurrentOrderData.fromJson(dynamic json) {
     _id = json['id'];
@@ -139,7 +144,9 @@ class CurrentOrderData {
         _orderItems?.add(OrderItems.fromJson(v));
       });
     }
-    _userAddress = json['user_address'] != null ? UserAddress.fromJson(json['user_address']) : null;
+    _userAddress = json['user_address'] != null
+        ? UserAddress.fromJson(json['user_address'])
+        : null;
   }
   int? _id;
   String? _orderId;
@@ -174,73 +181,76 @@ class CurrentOrderData {
   User? _user;
   List<OrderItems>? _orderItems;
   UserAddress? _userAddress;
-  CurrentOrderData copyWith({  int? id,
-  String? orderId,
-  int? vendorId,
-  int? userId,
-  int? deliveryPersonId,
-  String? date,
-  String? time,
-  String? paymentType,
-  String? paymentToken,
-  String? paymentStatus,
-  dynamic amount,
-  dynamic adminCommission,
-  dynamic vendorAmount,
-  String? deliveryType,
-  dynamic promocodeId,
-  int? promocodePrice,
-  dynamic vendorDiscountId,
-  dynamic vendorDiscountPrice,
-  int? addressId,
-  int? deliveryCharge,
-  String? orderStatus,
-  dynamic cancelBy,
-  dynamic cancelReason,
-  String? tax,
-  String? orderStartTime,
-  String? orderEndTime,
-  dynamic vendorPendingAmount,
-  String? createdAt,
-  String? updatedAt,
-  Vendor? vendor,
-  User? user,
-  List<OrderItems>? orderItems,
-  UserAddress? userAddress,
-}) => CurrentOrderData(  id: id ?? _id,
-  orderId: orderId ?? _orderId,
-  vendorId: vendorId ?? _vendorId,
-  userId: userId ?? _userId,
-  deliveryPersonId: deliveryPersonId ?? _deliveryPersonId,
-  date: date ?? _date,
-  time: time ?? _time,
-  paymentType: paymentType ?? _paymentType,
-  paymentToken: paymentToken ?? _paymentToken,
-  paymentStatus: paymentStatus ?? _paymentStatus,
-  amount: amount ?? _amount,
-  adminCommission: adminCommission ?? _adminCommission,
-  vendorAmount: vendorAmount ?? _vendorAmount,
-  deliveryType: deliveryType ?? _deliveryType,
-  promocodeId: promocodeId ?? _promocodeId,
-  promocodePrice: promocodePrice ?? _promocodePrice,
-  vendorDiscountId: vendorDiscountId ?? _vendorDiscountId,
-  vendorDiscountPrice: vendorDiscountPrice ?? _vendorDiscountPrice,
-  addressId: addressId ?? _addressId,
-  deliveryCharge: deliveryCharge ?? _deliveryCharge,
-  orderStatus: orderStatus ?? _orderStatus,
-  cancelBy: cancelBy ?? _cancelBy,
-  cancelReason: cancelReason ?? _cancelReason,
-  tax: tax ?? _tax,
-  orderStartTime: orderStartTime ?? _orderStartTime,
-  orderEndTime: orderEndTime ?? _orderEndTime,
-  vendorPendingAmount: vendorPendingAmount ?? _vendorPendingAmount,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-  vendor: vendor ?? _vendor,
-  user: user ?? _user,
-  orderItems: orderItems ?? _orderItems,
-  userAddress: userAddress ?? _userAddress,
-);
+  CurrentOrderData copyWith({
+    int? id,
+    String? orderId,
+    int? vendorId,
+    int? userId,
+    int? deliveryPersonId,
+    String? date,
+    String? time,
+    String? paymentType,
+    String? paymentToken,
+    String? paymentStatus,
+    dynamic amount,
+    dynamic adminCommission,
+    dynamic vendorAmount,
+    String? deliveryType,
+    dynamic promocodeId,
+    int? promocodePrice,
+    dynamic vendorDiscountId,
+    dynamic vendorDiscountPrice,
+    int? addressId,
+    int? deliveryCharge,
+    String? orderStatus,
+    dynamic cancelBy,
+    dynamic cancelReason,
+    String? tax,
+    String? orderStartTime,
+    String? orderEndTime,
+    dynamic vendorPendingAmount,
+    String? createdAt,
+    String? updatedAt,
+    Vendor? vendor,
+    User? user,
+    List<OrderItems>? orderItems,
+    UserAddress? userAddress,
+  }) =>
+      CurrentOrderData(
+        id: id ?? _id,
+        orderId: orderId ?? _orderId,
+        vendorId: vendorId ?? _vendorId,
+        userId: userId ?? _userId,
+        deliveryPersonId: deliveryPersonId ?? _deliveryPersonId,
+        date: date ?? _date,
+        time: time ?? _time,
+        paymentType: paymentType ?? _paymentType,
+        paymentToken: paymentToken ?? _paymentToken,
+        paymentStatus: paymentStatus ?? _paymentStatus,
+        amount: amount ?? _amount,
+        adminCommission: adminCommission ?? _adminCommission,
+        vendorAmount: vendorAmount ?? _vendorAmount,
+        deliveryType: deliveryType ?? _deliveryType,
+        promocodeId: promocodeId ?? _promocodeId,
+        promocodePrice: promocodePrice ?? _promocodePrice,
+        vendorDiscountId: vendorDiscountId ?? _vendorDiscountId,
+        vendorDiscountPrice: vendorDiscountPrice ?? _vendorDiscountPrice,
+        addressId: addressId ?? _addressId,
+        deliveryCharge: deliveryCharge ?? _deliveryCharge,
+        orderStatus: orderStatus ?? _orderStatus,
+        cancelBy: cancelBy ?? _cancelBy,
+        cancelReason: cancelReason ?? _cancelReason,
+        tax: tax ?? _tax,
+        orderStartTime: orderStartTime ?? _orderStartTime,
+        orderEndTime: orderEndTime ?? _orderEndTime,
+        vendorPendingAmount: vendorPendingAmount ?? _vendorPendingAmount,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        vendor: vendor ?? _vendor,
+        user: user ?? _user,
+        orderItems: orderItems ?? _orderItems,
+        userAddress: userAddress ?? _userAddress,
+      );
   int? get id => _id;
   String? get orderId => _orderId;
   int? get vendorId => _vendorId;
@@ -320,18 +330,18 @@ class CurrentOrderData {
     }
     return map;
   }
-
 }
 
 class UserAddress {
   UserAddress({
-      String? lat, 
-      String? lang, 
-      String? address,}){
+    String? lat,
+    String? lang,
+    String? address,
+  }) {
     _lat = lat;
     _lang = lang;
     _address = address;
-}
+  }
 
   UserAddress.fromJson(dynamic json) {
     _lat = json['lat'];
@@ -341,13 +351,16 @@ class UserAddress {
   String? _lat;
   String? _lang;
   String? _address;
-UserAddress copyWith({  String? lat,
-  String? lang,
-  String? address,
-}) => UserAddress(  lat: lat ?? _lat,
-  lang: lang ?? _lang,
-  address: address ?? _address,
-);
+  UserAddress copyWith({
+    String? lat,
+    String? lang,
+    String? address,
+  }) =>
+      UserAddress(
+        lat: lat ?? _lat,
+        lang: lang ?? _lang,
+        address: address ?? _address,
+      );
   String? get lat => _lat;
   String? get lang => _lang;
   String? get address => _address;
@@ -359,20 +372,20 @@ UserAddress copyWith({  String? lat,
     map['address'] = _address;
     return map;
   }
-
 }
 
 class OrderItems {
   OrderItems({
-      int? id, 
-      int? orderId, 
-      int? item, 
-      dynamic price,
-      int? qty, 
-      dynamic custimization, 
-      String? createdAt, 
-      String? updatedAt, 
-      String? itemName,}){
+    int? id,
+    int? orderId,
+    int? item,
+    dynamic price,
+    int? qty,
+    dynamic custimization,
+    String? createdAt,
+    String? updatedAt,
+    String? itemName,
+  }) {
     _id = id;
     _orderId = orderId;
     _item = item;
@@ -382,7 +395,7 @@ class OrderItems {
     _createdAt = createdAt;
     _updatedAt = updatedAt;
     _itemName = itemName;
-}
+  }
 
   OrderItems.fromJson(dynamic json) {
     _id = json['id'];
@@ -404,25 +417,28 @@ class OrderItems {
   String? _createdAt;
   String? _updatedAt;
   String? _itemName;
-OrderItems copyWith({  int? id,
-  int? orderId,
-  int? item,
-  dynamic price,
-  int? qty,
-  dynamic custimization,
-  String? createdAt,
-  String? updatedAt,
-  String? itemName,
-}) => OrderItems(  id: id ?? _id,
-  orderId: orderId ?? _orderId,
-  item: item ?? _item,
-  price: price ?? _price,
-  qty: qty ?? _qty,
-  custimization: custimization ?? _custimization,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-  itemName: itemName ?? _itemName,
-);
+  OrderItems copyWith({
+    int? id,
+    int? orderId,
+    int? item,
+    dynamic price,
+    int? qty,
+    dynamic custimization,
+    String? createdAt,
+    String? updatedAt,
+    String? itemName,
+  }) =>
+      OrderItems(
+        id: id ?? _id,
+        orderId: orderId ?? _orderId,
+        item: item ?? _item,
+        price: price ?? _price,
+        qty: qty ?? _qty,
+        custimization: custimization ?? _custimization,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        itemName: itemName ?? _itemName,
+      );
   int? get id => _id;
   int? get orderId => _orderId;
   int? get item => _item;
@@ -446,33 +462,33 @@ OrderItems copyWith({  int? id,
     map['itemName'] = _itemName;
     return map;
   }
-
 }
 
 class User {
   User({
-      int? id, 
-      String? name, 
-      String? image, 
-      String? emailId, 
-      dynamic emailVerifiedAt, 
-      String? deviceToken, 
-      String? phone, 
-      String? phoneCode, 
-      int? isVerified, 
-      int? status, 
-      dynamic otp, 
-      String? faviroute, 
-      dynamic vendorId, 
-      String? language, 
-      dynamic ifscCode, 
-      dynamic accountName, 
-      dynamic accountNumber, 
-      dynamic micrCode, 
-      dynamic providerType, 
-      dynamic providerToken, 
-      String? createdAt, 
-      String? updatedAt,}){
+    int? id,
+    String? name,
+    String? image,
+    String? emailId,
+    dynamic emailVerifiedAt,
+    String? deviceToken,
+    String? phone,
+    String? phoneCode,
+    int? isVerified,
+    int? status,
+    dynamic otp,
+    String? faviroute,
+    dynamic vendorId,
+    String? language,
+    dynamic ifscCode,
+    dynamic accountName,
+    dynamic accountNumber,
+    dynamic micrCode,
+    dynamic providerType,
+    dynamic providerToken,
+    String? createdAt,
+    String? updatedAt,
+  }) {
     _id = id;
     _name = name;
     _image = image;
@@ -495,7 +511,7 @@ class User {
     _providerToken = providerToken;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
-}
+  }
 
   User.fromJson(dynamic json) {
     _id = json['id'];
@@ -543,51 +559,54 @@ class User {
   dynamic _providerToken;
   String? _createdAt;
   String? _updatedAt;
-User copyWith({  int? id,
-  String? name,
-  String? image,
-  String? emailId,
-  dynamic emailVerifiedAt,
-  String? deviceToken,
-  String? phone,
-  String? phoneCode,
-  int? isVerified,
-  int? status,
-  dynamic otp,
-  String? faviroute,
-  dynamic vendorId,
-  String? language,
-  dynamic ifscCode,
-  dynamic accountName,
-  dynamic accountNumber,
-  dynamic micrCode,
-  dynamic providerType,
-  dynamic providerToken,
-  String? createdAt,
-  String? updatedAt,
-}) => User(  id: id ?? _id,
-  name: name ?? _name,
-  image: image ?? _image,
-  emailId: emailId ?? _emailId,
-  emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
-  deviceToken: deviceToken ?? _deviceToken,
-  phone: phone ?? _phone,
-  phoneCode: phoneCode ?? _phoneCode,
-  isVerified: isVerified ?? _isVerified,
-  status: status ?? _status,
-  otp: otp ?? _otp,
-  faviroute: faviroute ?? _faviroute,
-  vendorId: vendorId ?? _vendorId,
-  language: language ?? _language,
-  ifscCode: ifscCode ?? _ifscCode,
-  accountName: accountName ?? _accountName,
-  accountNumber: accountNumber ?? _accountNumber,
-  micrCode: micrCode ?? _micrCode,
-  providerType: providerType ?? _providerType,
-  providerToken: providerToken ?? _providerToken,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-);
+  User copyWith({
+    int? id,
+    String? name,
+    String? image,
+    String? emailId,
+    dynamic emailVerifiedAt,
+    String? deviceToken,
+    String? phone,
+    String? phoneCode,
+    int? isVerified,
+    int? status,
+    dynamic otp,
+    String? faviroute,
+    dynamic vendorId,
+    String? language,
+    dynamic ifscCode,
+    dynamic accountName,
+    dynamic accountNumber,
+    dynamic micrCode,
+    dynamic providerType,
+    dynamic providerToken,
+    String? createdAt,
+    String? updatedAt,
+  }) =>
+      User(
+        id: id ?? _id,
+        name: name ?? _name,
+        image: image ?? _image,
+        emailId: emailId ?? _emailId,
+        emailVerifiedAt: emailVerifiedAt ?? _emailVerifiedAt,
+        deviceToken: deviceToken ?? _deviceToken,
+        phone: phone ?? _phone,
+        phoneCode: phoneCode ?? _phoneCode,
+        isVerified: isVerified ?? _isVerified,
+        status: status ?? _status,
+        otp: otp ?? _otp,
+        faviroute: faviroute ?? _faviroute,
+        vendorId: vendorId ?? _vendorId,
+        language: language ?? _language,
+        ifscCode: ifscCode ?? _ifscCode,
+        accountName: accountName ?? _accountName,
+        accountNumber: accountNumber ?? _accountNumber,
+        micrCode: micrCode ?? _micrCode,
+        providerType: providerType ?? _providerType,
+        providerToken: providerToken ?? _providerToken,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+      );
   int? get id => _id;
   String? get name => _name;
   String? get image => _image;
@@ -637,48 +656,48 @@ User copyWith({  int? id,
     map['updated_at'] = _updatedAt;
     return map;
   }
-
 }
 
 class Vendor {
   Vendor({
-      int? id, 
-      int? userId, 
-      String? name, 
-      String? vendorLogo, 
-      String? emailId, 
-      String? image, 
-      String? password, 
-      String? contact, 
-      String? cuisineId, 
-      String? address, 
-      String? lat, 
-      String? lang, 
-      String? mapAddress, 
-      String? minOrderAmount, 
-      String? forTwoPerson, 
-      String? avgDeliveryTime, 
-      String? licenseNumber, 
-      String? adminComissionType, 
-      String? adminComissionValue, 
-      String? vendorType, 
-      String? timeSlot, 
-      String? tax, 
-      dynamic deliveryTypeTimeSlot, 
-      int? isExplorer, 
-      int? isTop, 
-      int? vendorOwnDriver, 
-      dynamic paymentOption, 
-      int? status, 
-      String? vendorLanguage, 
-      dynamic connectorType, 
-      dynamic connectorDescriptor, 
-      dynamic connectorPort, 
-      String? createdAt, 
-      String? updatedAt, 
-      List<Cuisine>? cuisine, 
-      int? rate, 
-      int? review,}){
+    int? id,
+    int? userId,
+    String? name,
+    String? vendorLogo,
+    String? emailId,
+    String? image,
+    String? password,
+    String? contact,
+    String? cuisineId,
+    String? address,
+    String? lat,
+    String? lang,
+    String? mapAddress,
+    String? minOrderAmount,
+    String? forTwoPerson,
+    String? avgDeliveryTime,
+    String? licenseNumber,
+    String? adminComissionType,
+    String? adminComissionValue,
+    String? vendorType,
+    String? timeSlot,
+    String? tax,
+    dynamic deliveryTypeTimeSlot,
+    int? isExplorer,
+    int? isTop,
+    int? vendorOwnDriver,
+    dynamic paymentOption,
+    int? status,
+    String? vendorLanguage,
+    dynamic connectorType,
+    dynamic connectorDescriptor,
+    dynamic connectorPort,
+    String? createdAt,
+    String? updatedAt,
+    List<Cuisine>? cuisine,
+    int? rate,
+    int? review,
+  }) {
     _id = id;
     _userId = userId;
     _name = name;
@@ -716,7 +735,7 @@ class Vendor {
     _cuisine = cuisine;
     _rate = rate;
     _review = review;
-}
+  }
 
   Vendor.fromJson(dynamic json) {
     _id = json['id'];
@@ -799,81 +818,84 @@ class Vendor {
   List<Cuisine>? _cuisine;
   int? _rate;
   int? _review;
-Vendor copyWith({  int? id,
-  int? userId,
-  String? name,
-  String? vendorLogo,
-  String? emailId,
-  String? image,
-  String? password,
-  String? contact,
-  String? cuisineId,
-  String? address,
-  String? lat,
-  String? lang,
-  String? mapAddress,
-  String? minOrderAmount,
-  String? forTwoPerson,
-  String? avgDeliveryTime,
-  String? licenseNumber,
-  String? adminComissionType,
-  String? adminComissionValue,
-  String? vendorType,
-  String? timeSlot,
-  String? tax,
-  dynamic deliveryTypeTimeSlot,
-  int? isExplorer,
-  int? isTop,
-  int? vendorOwnDriver,
-  dynamic paymentOption,
-  int? status,
-  String? vendorLanguage,
-  dynamic connectorType,
-  dynamic connectorDescriptor,
-  dynamic connectorPort,
-  String? createdAt,
-  String? updatedAt,
-  List<Cuisine>? cuisine,
-  int? rate,
-  int? review,
-}) => Vendor(  id: id ?? _id,
-  userId: userId ?? _userId,
-  name: name ?? _name,
-  vendorLogo: vendorLogo ?? _vendorLogo,
-  emailId: emailId ?? _emailId,
-  image: image ?? _image,
-  password: password ?? _password,
-  contact: contact ?? _contact,
-  cuisineId: cuisineId ?? _cuisineId,
-  address: address ?? _address,
-  lat: lat ?? _lat,
-  lang: lang ?? _lang,
-  mapAddress: mapAddress ?? _mapAddress,
-  minOrderAmount: minOrderAmount ?? _minOrderAmount,
-  forTwoPerson: forTwoPerson ?? _forTwoPerson,
-  avgDeliveryTime: avgDeliveryTime ?? _avgDeliveryTime,
-  licenseNumber: licenseNumber ?? _licenseNumber,
-  adminComissionType: adminComissionType ?? _adminComissionType,
-  adminComissionValue: adminComissionValue ?? _adminComissionValue,
-  vendorType: vendorType ?? _vendorType,
-  timeSlot: timeSlot ?? _timeSlot,
-  tax: tax ?? _tax,
-  deliveryTypeTimeSlot: deliveryTypeTimeSlot ?? _deliveryTypeTimeSlot,
-  isExplorer: isExplorer ?? _isExplorer,
-  isTop: isTop ?? _isTop,
-  vendorOwnDriver: vendorOwnDriver ?? _vendorOwnDriver,
-  paymentOption: paymentOption ?? _paymentOption,
-  status: status ?? _status,
-  vendorLanguage: vendorLanguage ?? _vendorLanguage,
-  connectorType: connectorType ?? _connectorType,
-  connectorDescriptor: connectorDescriptor ?? _connectorDescriptor,
-  connectorPort: connectorPort ?? _connectorPort,
-  createdAt: createdAt ?? _createdAt,
-  updatedAt: updatedAt ?? _updatedAt,
-  cuisine: cuisine ?? _cuisine,
-  rate: rate ?? _rate,
-  review: review ?? _review,
-);
+  Vendor copyWith({
+    int? id,
+    int? userId,
+    String? name,
+    String? vendorLogo,
+    String? emailId,
+    String? image,
+    String? password,
+    String? contact,
+    String? cuisineId,
+    String? address,
+    String? lat,
+    String? lang,
+    String? mapAddress,
+    String? minOrderAmount,
+    String? forTwoPerson,
+    String? avgDeliveryTime,
+    String? licenseNumber,
+    String? adminComissionType,
+    String? adminComissionValue,
+    String? vendorType,
+    String? timeSlot,
+    String? tax,
+    dynamic deliveryTypeTimeSlot,
+    int? isExplorer,
+    int? isTop,
+    int? vendorOwnDriver,
+    dynamic paymentOption,
+    int? status,
+    String? vendorLanguage,
+    dynamic connectorType,
+    dynamic connectorDescriptor,
+    dynamic connectorPort,
+    String? createdAt,
+    String? updatedAt,
+    List<Cuisine>? cuisine,
+    int? rate,
+    int? review,
+  }) =>
+      Vendor(
+        id: id ?? _id,
+        userId: userId ?? _userId,
+        name: name ?? _name,
+        vendorLogo: vendorLogo ?? _vendorLogo,
+        emailId: emailId ?? _emailId,
+        image: image ?? _image,
+        password: password ?? _password,
+        contact: contact ?? _contact,
+        cuisineId: cuisineId ?? _cuisineId,
+        address: address ?? _address,
+        lat: lat ?? _lat,
+        lang: lang ?? _lang,
+        mapAddress: mapAddress ?? _mapAddress,
+        minOrderAmount: minOrderAmount ?? _minOrderAmount,
+        forTwoPerson: forTwoPerson ?? _forTwoPerson,
+        avgDeliveryTime: avgDeliveryTime ?? _avgDeliveryTime,
+        licenseNumber: licenseNumber ?? _licenseNumber,
+        adminComissionType: adminComissionType ?? _adminComissionType,
+        adminComissionValue: adminComissionValue ?? _adminComissionValue,
+        vendorType: vendorType ?? _vendorType,
+        timeSlot: timeSlot ?? _timeSlot,
+        tax: tax ?? _tax,
+        deliveryTypeTimeSlot: deliveryTypeTimeSlot ?? _deliveryTypeTimeSlot,
+        isExplorer: isExplorer ?? _isExplorer,
+        isTop: isTop ?? _isTop,
+        vendorOwnDriver: vendorOwnDriver ?? _vendorOwnDriver,
+        paymentOption: paymentOption ?? _paymentOption,
+        status: status ?? _status,
+        vendorLanguage: vendorLanguage ?? _vendorLanguage,
+        connectorType: connectorType ?? _connectorType,
+        connectorDescriptor: connectorDescriptor ?? _connectorDescriptor,
+        connectorPort: connectorPort ?? _connectorPort,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        cuisine: cuisine ?? _cuisine,
+        rate: rate ?? _rate,
+        review: review ?? _review,
+      );
   int? get id => _id;
   int? get userId => _userId;
   String? get name => _name;
@@ -955,16 +977,16 @@ Vendor copyWith({  int? id,
     map['review'] = _review;
     return map;
   }
-
 }
 
 class Cuisine {
   Cuisine({
-      String? name, 
-      String? image,}){
+    String? name,
+    String? image,
+  }) {
     _name = name;
     _image = image;
-}
+  }
 
   Cuisine.fromJson(dynamic json) {
     _name = json['name'];
@@ -972,11 +994,14 @@ class Cuisine {
   }
   String? _name;
   String? _image;
-Cuisine copyWith({  String? name,
-  String? image,
-}) => Cuisine(  name: name ?? _name,
-  image: image ?? _image,
-);
+  Cuisine copyWith({
+    String? name,
+    String? image,
+  }) =>
+      Cuisine(
+        name: name ?? _name,
+        image: image ?? _image,
+      );
   String? get name => _name;
   String? get image => _image;
 
@@ -986,5 +1011,4 @@ Cuisine copyWith({  String? name,
     map['image'] = _image;
     return map;
   }
-
 }

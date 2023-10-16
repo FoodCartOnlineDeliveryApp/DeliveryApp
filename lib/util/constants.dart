@@ -75,6 +75,10 @@ class Constants {
   static final String previos_order_user_lang = "previos_order_user_lang";
   static final String previos_order_user_address = "previos_order_user_address";
   static final String previos_order_user_name = "previos_order_user_name";
+  static final String previos_order_items = "previos_order_items";
+  static final String previos_order_pay_type = "previos_order_pay_type";
+  static final String previos_order_amount = "previos_order_amount";
+  static final String previos_order_delivery_charge = "previos_order_delivery_charge";
   static final String user_phone_no = "user_phone_no";
   static final String lat = "0.0";
   static final String long = "0.0";

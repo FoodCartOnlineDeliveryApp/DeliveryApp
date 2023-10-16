@@ -5,6 +5,8 @@ import 'package:mealup_driver/localization/language/languages.dart';
 import 'package:mealup_driver/screen/homescreen.dart';
 import 'package:mealup_driver/util/constants.dart';
 
+import '../util/preferenceutils.dart';
+
 class OrderDeliverd extends StatefulWidget {
   @override
   _OrderDeliverd createState() => _OrderDeliverd();
@@ -20,19 +22,17 @@ class _OrderDeliverd extends State<OrderDeliverd> {
   }
 
   @override
-
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: new SafeArea(
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: AssetImage('images/back_img.png'),
-            fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(Constants.bgcolor,BlendMode.color)
-          )),
+                  image: AssetImage('images/back_img.png'),
+                  fit: BoxFit.cover,
+                  colorFilter:
+                      ColorFilter.mode(Constants.bgcolor, BlendMode.color))),
           child: Scaffold(
               backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
@@ -65,11 +65,47 @@ class _OrderDeliverd extends State<OrderDeliverd> {
                               margin: const EdgeInsets.only(
                                   top: 40.0, left: 15.0, right: 15, bottom: 20),
                               child: Text(
-                                Languages.of(context)!.orderdeliveredsuceelable,
+                                "Congratulations!!\n ${Languages.of(context)!.findothertasklable}",
                                 style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                     fontFamily: Constants.app_font,
                                     fontSize: 24),
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 40.0, left: 15.0, right: 15, bottom: 20),
+                              child: Text(
+                                "You have earned",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: Constants.app_font,
+                                    fontSize: 24),
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 10.0, left: 15.0, right: 15, bottom: 10),
+                              child: Text(
+                                // "${PreferenceUtils.getString(Constants.currencySymbol)}25",
+                                "${PreferenceUtils.getString(Constants.currencySymbol)}${PreferenceUtils.getString(Constants.previos_order_delivery_charge)}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: Constants.app_font,
+                                    fontSize: 32),
                                 maxLines: 2,
                                 textAlign: TextAlign.center,
                               ),
@@ -97,12 +133,11 @@ class _OrderDeliverd extends State<OrderDeliverd> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                            text: Languages.of(context)!
-                                                .findothertasklable,
+                                            text: "Go to next order",
                                             style: TextStyle(
-                                              color:
-                                                  Constants.color_theme,
-                                              fontSize: 16,
+                                              color: Constants.color_theme,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 20,
                                               fontFamily:
                                                   Constants.app_font_bold,
                                             )),
@@ -133,7 +168,7 @@ class _OrderDeliverd extends State<OrderDeliverd> {
     );
   }
 
-  Future<bool> _onWillPop() async{
+  Future<bool> _onWillPop() async {
     return true;
   }
 }

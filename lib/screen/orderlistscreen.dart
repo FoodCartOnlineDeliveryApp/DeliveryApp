@@ -24,6 +24,9 @@ import 'package:mealup_driver/widget/transitions.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
 
+import '../widget/rounded_corner_app_button.dart';
+import 'newGetOrderKitchenScreen.dart';
+
 class OrderList extends StatefulWidget {
   @override
   _OrderList createState() => _OrderList();
@@ -213,6 +216,19 @@ class _OrderList extends State<OrderList> {
     });
   }
 
+  //check current order
+  bool checkCurrentOrder() {
+    bool isAssigned = false;
+    final orderId = PreferenceUtils.getString(Constants.previos_order_orderid);
+    if (orderId != null && orderId != '' && currentOrderData.orderId != null) {
+      isAssigned = true;
+      // setState(() {
+      // });
+    }
+    print("isAssigned $isAssigned");
+    return isAssigned;
+  }
+
   /// current order
   Future<void> CurrentOrderApiCall() async {
     setState(() {
@@ -243,6 +259,17 @@ class _OrderList extends State<OrderList> {
                 response.data!.orderStatus.toString());
             PreferenceUtils.setString(Constants.previos_order_vendor_name,
                 response.data!.vendor!.name.toString());
+            PreferenceUtils.setString(Constants.previos_order_pay_type,
+                response.data!.paymentType.toString());
+            PreferenceUtils.setString(Constants.previos_order_amount,
+                response.data!.amount.toString());
+            PreferenceUtils.setString(Constants.previos_order_delivery_charge,
+                response.data!.deliveryCharge.toString());
+            PreferenceUtils.setString(
+                Constants.previos_order_items,
+                jsonEncode(response.data!.orderItems!
+                    .map((v) => v.toJson())
+                    .toList())); // Adding order items to prefs
             if (response.data?.vendor != null) {
               PreferenceUtils.setString(Constants.previos_order_vendor_address,
                   response.data!.vendor!.address.toString());
@@ -419,7 +446,7 @@ class _OrderList extends State<OrderList> {
 
           if (sucess == true) {
             Navigator.of(this.context).push(
-                MaterialPageRoute(builder: (context) => GetOrderKitchen()));
+                MaterialPageRoute(builder: (context) => NewGetOrderKitchen()));
           }
         } else if (sucess == false) {
           setState(() {
@@ -1490,7 +1517,6 @@ class _OrderList extends State<OrderList> {
                                                         //         InkWell(
                                                         //           onTap: () {
                                                         //             if (currentOrderData
-                                                        //                     .orderId !=
                                                         //                 null) {
                                                         //               Constants
                                                         //                   .toastMessage(
@@ -1631,6 +1657,13 @@ class _OrderList extends State<OrderList> {
                                                             vertical: 10),
                                                     child: SlideAction(
                                                       text: "Accept",
+                                                      textStyle: TextStyle(
+                                                          fontFamily: Constants
+                                                              .app_font,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 22,
+                                                          color: Colors.white),
                                                       // borderRadius: 10,
                                                       height: 50,
                                                       sliderButtonIconSize: 30,
@@ -1880,28 +1913,32 @@ class _OrderList extends State<OrderList> {
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
                         ),
 
                         /// last order
-                        currentOrderData.orderId != null
-                            ? Container(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    height: ScreenUtil().setHeight(100),
-                                    color: const Color(0xFF42565f),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
+                        Visibility(
+                            visible: checkCurrentOrder(),
+                            child: Container(
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: ScreenUtil().setHeight(180),
+                                  color: const Color(0xFF42565f),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
                                           margin: EdgeInsets.only(
                                               left: 20, top: 20),
                                           child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 Languages.of(context)!
@@ -1912,119 +1949,325 @@ class _OrderList extends State<OrderList> {
                                                             .previos_order_orderid),
                                                 style: TextStyle(
                                                     color: Colors.white,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontFamily:
+                                                        Constants.app_font_bold,
+                                                    fontSize: 18),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                PreferenceUtils.getString(Constants
+                                                    .previos_order_vendor_name),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: Colors.white,
                                                     fontFamily:
                                                         Constants.app_font_bold,
                                                     fontSize: 16),
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _OpenCancelBottomSheet(
-                                                          PreferenceUtils
-                                                              .getString(Constants
-                                                                  .previos_order_id
-                                                                  .toString()),
-                                                          context);
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 10, top: 10),
-                                                      child: Text(
-                                                        Languages.of(context)!
-                                                            .canceldeliverylable,
-                                                        style: TextStyle(
-                                                            color: Constants
-                                                                .color_red,
-                                                            fontFamily:
-                                                                Constants
-                                                                    .app_font,
-                                                            fontSize: 14),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                PreferenceUtils.getString(Constants
+                                                    .previos_order_vendor_address),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily:
+                                                        Constants.app_font_bold,
+                                                    fontSize: 16),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              RichText(
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textScaleFactor: 1,
+                                                text: TextSpan(
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 5,
+                                                            top: 0,
+                                                            bottom: 0,
+                                                            right: 5),
+                                                        child: SvgPicture.asset(
+                                                          "images/location.svg",
+                                                          width: 13,
+                                                          height: 13,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      PreferenceUtils.getString(
+                                                    WidgetSpan(
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 0,
+                                                            top: 0,
+                                                            bottom: 0,
+                                                            right: 5),
+                                                        child: Text(
+                                                          PreferenceUtils.getString(
                                                                   Constants
-                                                                      .previos_order_status) ==
-                                                              'PICKUP'
-                                                          ? Navigator.of(
-                                                                  context)
-                                                              .push(MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          PickUpOrder()))
-                                                          : Navigator.of(
-                                                                  context)
-                                                              .push(MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          GetOrderKitchen()));
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 12, top: 10),
-                                                      child: Text(
-                                                        Languages.of(context)!
-                                                            .pickupanddeliverlable,
-                                                        style: TextStyle(
+                                                                      .previos_order_distance) +
+                                                              Languages.of(
+                                                                      context)!
+                                                                  .kmfarawaylable,
+                                                          style: TextStyle(
                                                             color: Constants
-                                                                .color_theme,
+                                                                .whitetext,
+                                                            fontSize: 12,
                                                             fontFamily:
                                                                 Constants
                                                                     .app_font,
-                                                            fontSize: 14),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Center(
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    elevation: 5.0,
+                                                    textStyle: TextStyle(
+                                                        color: Colors.white),
+                                                    backgroundColor:
+                                                        Constants.color_theme,
+                                                    shape:
+                                                        new RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          new BorderRadius
+                                                              .circular(15.0),
+                                                    ),
                                                   ),
-                                                  Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 5, top: 12),
-                                                      child: SvgPicture.asset(
-                                                          "images/right_arrow.svg")),
-                                                ],
-                                              )
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .fromLTRB(
+                                                        0.0, 15.0, 0, 15.0),
+                                                    child: Text(
+                                                      "Complete current order",
+                                                      style: TextStyle(
+                                                          fontFamily: Constants
+                                                              .app_font,
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                          fontSize: 16.0),
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    // PreferenceUtils.setString(
+                                                    //     'pickup_btn_status',
+                                                    //     "pickup");
+                                                    final status =
+                                                        PreferenceUtils.getString(
+                                                            'pickup_btn_status',
+                                                            "pickup");
+                                                    if (status ==
+                                                        "place_order") {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PickUpOrder()));
+                                                    } else {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  NewGetOrderKitchen()));
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
                                             ],
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: CachedNetworkImage(
-                                            imageUrl: PreferenceUtils.getString(
-                                                Constants
-                                                    .previos_order_vendor_image),
-                                            fit: BoxFit.fill,
-                                            width: ScreenUtil().setWidth(55),
-                                            height: ScreenUtil().setHeight(55),
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: Image(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
-                                              ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: CachedNetworkImage(
+                                          imageUrl: PreferenceUtils.getString(
+                                              Constants
+                                                  .previos_order_vendor_image),
+                                          fit: BoxFit.fill,
+                                          width: ScreenUtil().setWidth(55),
+                                          height: ScreenUtil().setHeight(55),
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
                                             ),
-                                            placeholder: (context, url) =>
-                                                SpinKitFadingCircle(
-                                                    color:
-                                                        Constants.color_theme),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset(
-                                                        "images/no_image.png"),
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                          placeholder: (context, url) =>
+                                              SpinKitFadingCircle(
+                                                  color: Constants.color_theme),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                                  "images/no_image.png"),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              )
-                            : Container(),
+                              ),
+                            )),
+
+                        // /// last order
+                        // currentOrderData.orderId != null
+                        //     ? Container(
+                        //         child: Align(
+                        //           alignment: Alignment.bottomCenter,
+                        //           child: Container(
+                        //             height: ScreenUtil().setHeight(100),
+                        //             color: const Color(0xFF42565f),
+                        //             child: Row(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.spaceBetween,
+                        //               children: [
+                        //                 Container(
+                        //                   margin: EdgeInsets.only(
+                        //                       left: 20, top: 20),
+                        //                   child: Column(
+                        //                     children: [
+                        //                       Text(
+                        //                         Languages.of(context)!
+                        //                                 .oidlable +
+                        //                             "  " +
+                        //                             PreferenceUtils.getString(
+                        //                                 Constants
+                        //                                     .previos_order_orderid),
+                        //                         style: TextStyle(
+                        //                             color: Colors.white,
+                        //                             fontFamily:
+                        //                                 Constants.app_font_bold,
+                        //                             fontSize: 16),
+                        //                       ),
+                        //                       Row(
+                        //                         mainAxisAlignment:
+                        //                             MainAxisAlignment.start,
+                        //                         children: [
+                        //                           InkWell(
+                        //                             onTap: () {
+                        //                               _OpenCancelBottomSheet(
+                        //                                   PreferenceUtils
+                        //                                       .getString(Constants
+                        //                                           .previos_order_id
+                        //                                           .toString()),
+                        //                                   context);
+                        //                             },
+                        //                             child: Container(
+                        //                               margin: EdgeInsets.only(
+                        //                                   left: 10, top: 10),
+                        //                               child: Text(
+                        //                                 Languages.of(context)!
+                        //                                     .canceldeliverylable,
+                        //                                 style: TextStyle(
+                        //                                     color: Constants
+                        //                                         .color_red,
+                        //                                     fontFamily:
+                        //                                         Constants
+                        //                                             .app_font,
+                        //                                     fontSize: 14),
+                        //                               ),
+                        //                             ),
+                        //                           ),
+                        //                           InkWell(
+                        //                             onTap: () {
+                        //                               PreferenceUtils.getString(
+                        //                                           Constants
+                        //                                               .previos_order_status) ==
+                        //                                       'PICKUP'
+                        //                                   ? Navigator.of(
+                        //                                           context)
+                        //                                       .push(MaterialPageRoute(
+                        //                                           builder:
+                        //                                               (context) =>
+                        //                                                   PickUpOrder()))
+                        //                                   : Navigator.of(
+                        //                                           context)
+                        //                                       .push(MaterialPageRoute(
+                        //                                           builder:
+                        //                                               (context) =>
+                        //                                                   NewGetOrderKitchen()));
+                        //                             },
+                        //                             child: Container(
+                        //                               margin: EdgeInsets.only(
+                        //                                   left: 12, top: 10),
+                        //                               child: Text(
+                        //                                 Languages.of(context)!
+                        //                                     .pickupanddeliverlable,
+                        //                                 style: TextStyle(
+                        //                                     color: Constants
+                        //                                         .color_theme,
+                        //                                     fontFamily:
+                        //                                         Constants
+                        //                                             .app_font,
+                        //                                     fontSize: 14),
+                        //                               ),
+                        //                             ),
+                        //                           ),
+                        //                           Container(
+                        //                               margin: EdgeInsets.only(
+                        //                                   left: 5, top: 12),
+                        //                               child: SvgPicture.asset(
+                        //                                   "images/right_arrow.svg")),
+                        //                         ],
+                        //                       )
+                        //                     ],
+                        //                   ),
+                        //                 ),
+                        //                 Container(
+                        //                   margin: EdgeInsets.only(right: 20),
+                        //                   child: CachedNetworkImage(
+                        //                     imageUrl: PreferenceUtils.getString(
+                        //                         Constants
+                        //                             .previos_order_vendor_image),
+                        //                     fit: BoxFit.fill,
+                        //                     width: ScreenUtil().setWidth(55),
+                        //                     height: ScreenUtil().setHeight(55),
+                        //                     imageBuilder:
+                        //                         (context, imageProvider) =>
+                        //                             ClipRRect(
+                        //                       borderRadius:
+                        //                           BorderRadius.circular(10.0),
+                        //                       child: Image(
+                        //                         image: imageProvider,
+                        //                         fit: BoxFit.cover,
+                        //                       ),
+                        //                     ),
+                        //                     placeholder: (context, url) =>
+                        //                         SpinKitFadingCircle(
+                        //                             color:
+                        //                                 Constants.color_theme),
+                        //                     errorWidget:
+                        //                         (context, url, error) =>
+                        //                             Image.asset(
+                        //                                 "images/no_image.png"),
+                        //                   ),
+                        //                 )
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : Container(),
                       ],
                     );
                   }),

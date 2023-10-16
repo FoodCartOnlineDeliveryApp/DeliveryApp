@@ -17,16 +17,17 @@ import 'package:mealup_driver/screen/orderdeliverdscreen.dart';
 import 'package:mealup_driver/util/constants.dart';
 import 'package:mealup_driver/util/preferenceutils.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:slide_to_act_reborn/slide_to_act_reborn.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PickUpOrder extends StatefulWidget {
+import '../model/current_order.dart';
 
+class PickUpOrder extends StatefulWidget {
   @override
   _PickUpOrder createState() => _PickUpOrder();
 }
 
 class _PickUpOrder extends State<PickUpOrder> {
-
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   double heigntValue = 300;
   bool vi_footer = true;
@@ -63,6 +64,7 @@ class _PickUpOrder extends State<PickUpOrder> {
   double CAMERA_ZOOM = 14.4746;
   double CAMERA_TILT = 80;
   double CAMERA_BEARING = 30;
+  bool cashCollected = false;
 
   @override
   void initState() {
@@ -73,12 +75,14 @@ class _PickUpOrder extends State<PickUpOrder> {
     PreferenceUtils.init();
     _getCurrentLocation();
 
-    if (Constants.currentlat != 0.0 && Constants.currentlong != 0.0 ) {
+    if (Constants.currentlat != 0.0 && Constants.currentlong != 0.0) {
       setState(() {
-        if(PreferenceUtils.getString(Constants.previos_order_user_lat) != ''){
-          user_lat = double.parse(PreferenceUtils.getString(Constants.previos_order_user_lat));
-          user_lang = double.parse(PreferenceUtils.getString(Constants.previos_order_user_lang));
-        }else{
+        if (PreferenceUtils.getString(Constants.previos_order_user_lat) != '') {
+          user_lat = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_user_lat));
+          user_lang = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_user_lang));
+        } else {
           user_lat = 0.0;
           user_lang = 0.0;
         }
@@ -89,7 +93,9 @@ class _PickUpOrder extends State<PickUpOrder> {
         driver_lat = Constants.currentlat;
         driver_lang = Constants.currentlong;
 
-        String str =  Constants.calculateDistance(driver_lat!, driver_lang!, user_lat!, user_lang!).toString();
+        String str = Constants.calculateDistance(
+                driver_lat!, driver_lang!, user_lat!, user_lang!)
+            .toString();
         var distance12 = str.split('.');
         user_distance = distance12[0];
 
@@ -123,9 +129,7 @@ class _PickUpOrder extends State<PickUpOrder> {
                   PostDriverLocation(driver_lat, driver_lang);
                 }));
       });
-    } else {
-
-    }
+    } else {}
     if (mounted) {
       setState(() {
         id = PreferenceUtils.getString(Constants.previos_order_id);
@@ -138,17 +142,17 @@ class _PickUpOrder extends State<PickUpOrder> {
         username = PreferenceUtils.getString(Constants.previos_order_user_name);
         useraddress =
             PreferenceUtils.getString(Constants.previos_order_user_address);
-        if(PreferenceUtils.getString(Constants.previos_order_user_lat) != '') {
-          user_lat = double.parse(PreferenceUtils.getString(Constants.previos_order_user_lat));
-          user_lang = double.parse(PreferenceUtils.getString(Constants.previos_order_user_lang));
-        }else{
-          user_lat = 0.0 ;
+        if (PreferenceUtils.getString(Constants.previos_order_user_lat) != '') {
+          user_lat = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_user_lat));
+          user_lang = double.parse(
+              PreferenceUtils.getString(Constants.previos_order_user_lang));
+        } else {
+          user_lat = 0.0;
           user_lang = 0.0;
-
         }
         assert(user_lat is double);
         assert(user_lang is double);
-
       });
     }
 
@@ -159,15 +163,12 @@ class _PickUpOrder extends State<PickUpOrder> {
               }));
     });
     location!.onLocationChanged.listen((LocationData cLoc) {
-
       currentLocation = cLoc;
       updatePinOnMap();
     });
-
   }
 
   updatePinOnMap() async {
-
     CameraPosition cPosition = CameraPosition(
       zoom: CAMERA_ZOOM,
       tilt: CAMERA_TILT,
@@ -177,7 +178,9 @@ class _PickUpOrder extends State<PickUpOrder> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
 
-    final marker = markers.values.toList().firstWhere((item) => item.markerId == MarkerId('origin'));
+    final marker = markers.values
+        .toList()
+        .firstWhere((item) => item.markerId == MarkerId('origin'));
 
     Marker _marker = Marker(
       markerId: marker.markerId,
@@ -188,19 +191,16 @@ class _PickUpOrder extends State<PickUpOrder> {
     setState(() {
       markers[MarkerId('origin')] = _marker;
     });
-
   }
 
   void PostDriverLocation(double? currentlat, double? currentlang) {
-
     RestClient(ApiHeader().dioData())
         .driveUpdateLatLong(currentlat.toString(), currentlang.toString())
         .then((response) {
       final body = json.decode(response!);
       bool? sucess = body['success'];
       if (sucess = true) {
-      } else if (sucess == false) {
-      }
+      } else if (sucess == false) {}
     }).catchError((Object obj) {
       final snackBar = SnackBar(
         content: Text(Languages.of(context)!.servererrorlable),
@@ -215,14 +215,13 @@ class _PickUpOrder extends State<PickUpOrder> {
 
   void CallApiForDeliverorder(BuildContext context) {
     setState(() {
-       showSpinner = true;
+      showSpinner = true;
     });
 
     if (mounted) {
       RestClient(ApiHeader().dioData())
           .orderStatusChange1(id, "COMPLETE")
           .then((response) {
-
         final body = json.decode(response!);
         bool? sucess = body['success'];
         if (sucess = true) {
@@ -261,7 +260,6 @@ class _PickUpOrder extends State<PickUpOrder> {
 
   @override
   Widget build(BuildContext context) {
-
     dynamic screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
@@ -270,10 +268,10 @@ class _PickUpOrder extends State<PickUpOrder> {
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: AssetImage('images/back_img.png'),
-            fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(Constants.bgcolor,BlendMode.color)
-          )),
+                  image: AssetImage('images/back_img.png'),
+                  fit: BoxFit.cover,
+                  colorFilter:
+                      ColorFilter.mode(Constants.bgcolor, BlendMode.color))),
           child: Scaffold(
               backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
@@ -293,69 +291,68 @@ class _PickUpOrder extends State<PickUpOrder> {
                           margin: EdgeInsets.only(bottom: 00),
                           child: Column(
                             children: <Widget>[
-                              Expanded(
-                                flex: 3,
-                                child: AnimatedContainer(
-                                  duration: Duration(milliseconds: 300),
-                                  height: screenHeight * 0.7,
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        child: GoogleMap(
-                                            mapType: MapType.normal,
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                              target: LatLng(
-                                                  driver_lat!, driver_lang!),
-                                              zoom: 14.4746,
-                                            ),
-                                            myLocationEnabled: true,
-                                            tiltGesturesEnabled: true,
-                                            compassEnabled: true,
-                                            scrollGesturesEnabled: true,
-                                            zoomGesturesEnabled: true,
-                                            markers:
-                                                Set<Marker>.of(markers.values),
-                                            polylines: Set<Polyline>.of(
-                                                polylines.values),
-                                            onMapCreated: onMapCreated),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.topRight,
-                                        margin:
-                                            EdgeInsets.only(right: 20, top: 10),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 5.0,
-                                            textStyle: TextStyle(color: Colors.white),
-                                            backgroundColor: Constants.color_theme,
-                                            shape: new RoundedRectangleBorder(
-                                              borderRadius:
-                                              new BorderRadius.circular(15.0),
-                                            ),
+                              // Expanded(
+                              //   flex: 3,
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                height: screenHeight * 0.3,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      child: GoogleMap(
+                                          mapType: MapType.normal,
+                                          initialCameraPosition: CameraPosition(
+                                            target: LatLng(
+                                                driver_lat!, driver_lang!),
+                                            zoom: 14.4746,
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10.0, 10.0, 10.0, 10.0),
-                                            child: Text(
-                                              'Go To Map',
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      Constants.app_font,
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 16.0),
-                                            ),
+                                          myLocationEnabled: true,
+                                          tiltGesturesEnabled: true,
+                                          compassEnabled: true,
+                                          scrollGesturesEnabled: true,
+                                          zoomGesturesEnabled: true,
+                                          markers:
+                                              Set<Marker>.of(markers.values),
+                                          polylines: Set<Polyline>.of(
+                                              polylines.values),
+                                          onMapCreated: onMapCreated),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      margin:
+                                          EdgeInsets.only(right: 20, top: 10),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 5.0,
+                                          textStyle:
+                                              TextStyle(color: Colors.white),
+                                          backgroundColor:
+                                              Constants.color_theme,
+                                          shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(15.0),
                                           ),
-                                          onPressed: () {
-                                            if (user_lat != null &&
-                                                user_lang != null) {
-                                              openMap(user_lat, user_lang);
-                                            }
-                                          },
                                         ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10.0, 10.0, 10.0, 10.0),
+                                          child: Text(
+                                            'Go To Map',
+                                            style: TextStyle(
+                                                fontFamily: Constants.app_font,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 16.0),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          if (user_lat != null &&
+                                              user_lang != null) {
+                                            openMap(user_lat, user_lang);
+                                          }
+                                        },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               InkWell(
@@ -378,13 +375,13 @@ class _PickUpOrder extends State<PickUpOrder> {
                                 ),
                               ),
                               SingleChildScrollView(
-                                physics: AlwaysScrollableScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                                 child: Visibility(
                                   visible: vi_address,
                                   child: Container(
-                                    height: ScreenUtil().setHeight(220),
+                                    // height: ScreenUtil().setHeight(220),
                                     margin: EdgeInsets.only(
-                                        left: 20, top: 10, bottom: 60),
+                                        left: 20, top: 10, bottom: 0),
                                     color: Colors.transparent,
                                     child: Column(
                                       children: [
@@ -393,38 +390,107 @@ class _PickUpOrder extends State<PickUpOrder> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Container(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    Languages.of(context)!.oidlable +
-                                                        "   " +
-                                                        orderId ,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
+                                                Builder(builder: (context) {
+                                                  final newOrderId = orderId;
+                                                  final prefixId =
+                                                      newOrderId.substring(
+                                                          0,
+                                                          newOrderId.length -
+                                                              4);
+                                                  final suffixId =
+                                                      newOrderId.substring(
+                                                          newOrderId.length -
+                                                              4);
+                                                  return RichText(
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textScaleFactor: 1,
+                                                    text: TextSpan(
+                                                      children: [
+                                                        WidgetSpan(
+                                                          child: Container(
+                                                            child: Text(
+                                                              Languages.of(
+                                                                          context)!
+                                                                      .oidlable +
+                                                                  "   " +
+                                                                  prefixId,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        WidgetSpan(
+                                                          child: Container(
+                                                            child: Text(
+                                                              suffixId,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .green,
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w900),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.call,color: Colors.white),
-                                                    SizedBox(width: 10),
-                                                    Text(
-                                                        PreferenceUtils.getString(Constants.user_phone_no),
-                                                        style: TextStyle(
-                                                            color:
-                                                            Constants
-                                                                .whitetext,
-                                                            fontSize:
-                                                            16,
-                                                            fontFamily:
-                                                            Constants
-                                                                .app_font_bold)),
-                                                  ],
-                                                ),
+                                                  );
+                                                }),
+                                                // Container(
+                                                //   alignment: Alignment.topLeft,
+                                                //   child: Text(
+                                                //     Languages.of(context)!
+                                                //             .oidlable +
+                                                //         "   " +
+                                                //         orderId,
+                                                //     style: TextStyle(
+                                                //       color: Colors.white,
+                                                //       fontSize: 18,
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                // Row(
+                                                //   children: [
+                                                //     Icon(Icons.call,
+                                                //         color: Colors.white),
+                                                //     SizedBox(width: 10),
+                                                //     Text(
+                                                //         PreferenceUtils
+                                                //             .getString(Constants
+                                                //                 .user_phone_no),
+                                                //         style: TextStyle(
+                                                //             color: Constants
+                                                //                 .whitetext,
+                                                //             fontSize: 16,
+                                                //             fontFamily: Constants
+                                                //                 .app_font_bold)),
+                                                //   ],
+                                                // ),
                                               ],
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              height: 30,
+                                              child: Text(
+                                                "${PreferenceUtils.getString(Constants.currencySymbol)}${PreferenceUtils.getString(Constants.previos_order_amount)}",
+                                                style: TextStyle(
+                                                    color: Constants.whitetext,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontFamily: Constants
+                                                        .app_font_bold),
+                                              ),
                                             ),
                                             InkWell(
                                               onTap: () {
@@ -446,10 +512,38 @@ class _PickUpOrder extends State<PickUpOrder> {
                                             ),
                                           ],
                                         ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Constants.color_theme,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              alignment: Alignment.centerLeft,
+                                              height: 30,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 5),
+                                              child: Text(
+                                                PreferenceUtils.getString(
+                                                    Constants
+                                                        .previos_order_pay_type),
+                                                style: TextStyle(
+                                                    color: Constants.whitetext,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w800,
+                                                    fontFamily: Constants
+                                                        .app_font_bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         Container(
-                                          height: ScreenUtil().setHeight(150),
+                                          height: ScreenUtil().setHeight(130),
                                           margin: EdgeInsets.only(top: 20),
                                           child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               itemCount: 2,
                                               itemBuilder: (con, index) {
                                                 double linetop = 0;
@@ -459,7 +553,8 @@ class _PickUpOrder extends State<PickUpOrder> {
                                                 Color dotcolor;
 
                                                 if (index == 0) {
-                                                  dotcolor = Constants.color_theme;
+                                                  dotcolor =
+                                                      Constants.color_theme;
                                                 }
 
                                                 if (index == 1) {
@@ -467,7 +562,8 @@ class _PickUpOrder extends State<PickUpOrder> {
                                                   dottop = -42.0;
                                                   statustop = -35.0;
                                                   color = Constants.color_theme;
-                                                  dotcolor = Constants.color_theme;
+                                                  dotcolor =
+                                                      Constants.color_theme;
                                                 }
 
                                                 return index != 0
@@ -544,7 +640,8 @@ class _PickUpOrder extends State<PickUpOrder> {
                                                                       ListView(
                                                                     shrinkWrap:
                                                                         true,
-                                                                    physics:NeverScrollableScrollPhysics(),
+                                                                    physics:
+                                                                        NeverScrollableScrollPhysics(),
                                                                     children: [
                                                                       Row(
                                                                         mainAxisAlignment:
@@ -674,6 +771,112 @@ class _PickUpOrder extends State<PickUpOrder> {
                                   ),
                                 ),
                               ),
+                              Expanded(
+                                child: Builder(builder: (context) {
+                                  final encode = PreferenceUtils.getString(
+                                      Constants.previos_order_items);
+                                  final decode = jsonDecode(encode);
+                                  List<OrderItems> orderItems = <OrderItems>[];
+                                  decode.forEach((v) {
+                                    orderItems.add(OrderItems.fromJson(v));
+                                  });
+
+                                  return ListView.builder(
+                                    itemCount: orderItems.length,
+                                    shrinkWrap: true,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemBuilder: (context, position) {
+                                      return Container(
+                                        margin:
+                                            EdgeInsets.only(top: 10, left: 15),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              orderItems[position].itemName!,
+                                              style: TextStyle(
+                                                color: Constants.greaytext,
+                                                fontFamily: Constants.app_font,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                            Text(
+                                              "  x " +
+                                                  orderItems[position]
+                                                      .qty
+                                                      .toString(),
+                                              style: TextStyle(
+                                                color: Constants.color_theme,
+                                                fontFamily: Constants.app_font,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 22,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }),
+                              ),
+                              // if (PreferenceUtils.getString(
+                              //             Constants.previos_order_pay_type)
+                              //         .toUpperCase() ==
+                              //     "COD")
+                              //   SizedBox(
+                              //     height: 15,
+                              //   ),
+                              if (PreferenceUtils.getString(
+                                          Constants.previos_order_pay_type)
+                                      .toUpperCase() ==
+                                  "COD")
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Cash collected",
+                                        style: TextStyle(
+                                            fontFamily: Constants.app_font,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 26.0),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Checkbox(
+                                            activeColor: Colors.transparent,
+                                            fillColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) =>
+                                                        Constants.color_theme),
+                                            checkColor: Constants.whitetext,
+                                            overlayColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) => Colors.white),
+                                            materialTapTargetSize:
+                                                MaterialTapTargetSize.padded,
+                                            value: cashCollected,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                cashCollected = val!;
+                                              });
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              if (PreferenceUtils.getString(
+                                          Constants.previos_order_pay_type)
+                                      .toUpperCase() ==
+                                  "COD")
+                                SizedBox(
+                                  height: 25,
+                                ),
                             ],
                           ),
                         ),
@@ -683,42 +886,82 @@ class _PickUpOrder extends State<PickUpOrder> {
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                    child: InkWell(
-                                  onTap: () {
-                                    Constants.CheckNetwork().whenComplete(
-                                        () => CallApiForDeliverorder(this.context));
-                                  },
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 0, right: 0, bottom: 0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(0.0),
-                                        color: Constants.color_theme,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey,
-                                            offset: Offset(0.0, 0.0),
-                                            //(x,y)
-                                            blurRadius: 0.0,
-                                          ),
-                                        ],
-                                      ),
-                                      height: screenHeight * 0.08,
-                                      child: Center(
-                                        child: Container(
-                                          color: Constants.color_theme,
-                                          child: Text(
-                                            Languages.of(context)!
-                                                .completeorderlable,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontFamily: Constants.app_font),
-                                          ),
-                                        ),
-                                      )),
-                                )),
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 20),
+                                  child: IgnorePointer(
+                                    ignoring: !cashCollected,
+                                    child: SlideAction(
+                                      text: Languages.of(context)!
+                                          .completeorderlable,
+                                      textStyle: TextStyle(
+                                          fontFamily: Constants.app_font,
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 22,
+                                          color: Colors.white),
+                                      // borderRadius: 10,
+                                      height: 50,
+                                      alignment: Alignment.bottomCenter,
+                                      sliderButtonIconSize: 30,
+                                      outerColor: cashCollected
+                                          ? Constants.color_theme
+                                          : Colors.grey,
+                                      sliderButtonIconPadding: 5,
+                                      onSubmit: () {
+                                        if (cashCollected) {
+                                          print("Picked Up");
+                                          Constants.CheckNetwork().whenComplete(
+                                              () => CallApiForDeliverorder(
+                                                  this.context));
+                                          PreferenceUtils.setString(
+                                              'pickup_btn_status', "pickup");
+                                        } else {
+                                          print("Collect cash");
+                                        }
+                                        // Constants.CheckNetwork().whenComplete(
+                                        //     () => CallApiForPickUporder(context));
+                                        // setReachDestBtnStatus(true);
+                                      },
+                                    ),
+                                  ),
+                                  // child: InkWell(
+                                  //   onTap: () {
+                                  //     Constants.CheckNetwork().whenComplete(
+                                  //         () => CallApiForDeliverorder(
+                                  //             this.context));
+                                  //   },
+                                  //   child: Container(
+                                  //       margin: EdgeInsets.only(
+                                  //           left: 0, right: 0, bottom: 0),
+                                  //       decoration: BoxDecoration(
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(0.0),
+                                  //         color: Constants.color_theme,
+                                  //         boxShadow: [
+                                  //           BoxShadow(
+                                  //             color: Colors.grey,
+                                  //             offset: Offset(0.0, 0.0),
+                                  //             //(x,y)
+                                  //             blurRadius: 0.0,
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //       height: screenHeight * 0.08,
+                                  //       child: Center(
+                                  //         child: Container(
+                                  //           color: Constants.color_theme,
+                                  //           child: Text(
+                                  //             Languages.of(context)!
+                                  //                 .completeorderlable,
+                                  //             style: TextStyle(
+                                  //                 color: Colors.white,
+                                  //                 fontSize: 16,
+                                  //                 fontFamily:
+                                  //                     Constants.app_font),
+                                  //           ),
+                                  //         ),
+                                  //       )),
+                                  // ),
+                                ),
                               ),
                             )),
                       ],
@@ -731,7 +974,7 @@ class _PickUpOrder extends State<PickUpOrder> {
     );
   }
 
-  Future<bool> _onWillPop() async{
+  Future<bool> _onWillPop() async {
     return true;
   }
 
@@ -753,29 +996,29 @@ class _PickUpOrder extends State<PickUpOrder> {
         if (Platform.isAndroid) {
           platform = Constants.androidKey;
         } else if (Platform.isIOS) {
-          platform =Constants.iosKey;
+          platform = Constants.iosKey;
         }
-        try{
-        _controller.complete(googleMapController);
+        try {
+          _controller.complete(googleMapController);
 
-        PolylinePoints polylinePoints = PolylinePoints();
-        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-            platform ,
-            PointLatLng(driver_lat!, driver_lang!),
-            PointLatLng(user_lat!, user_lang!));
-        print(result.points);
-        if (result.points.isNotEmpty) {
-          result.points.forEach((PointLatLng point) {
-            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-          });
-        }
+          PolylinePoints polylinePoints = PolylinePoints();
+          PolylineResult result =
+              await polylinePoints.getRouteBetweenCoordinates(
+                  platform,
+                  PointLatLng(driver_lat!, driver_lang!),
+                  PointLatLng(user_lat!, user_lang!));
+          print(result.points);
+          if (result.points.isNotEmpty) {
+            result.points.forEach((PointLatLng point) {
+              polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+            });
+          }
 
-        PolylineId id = PolylineId("poly");
-        Polyline polyline = Polyline(
-            polylineId: id, color: Colors.green, points: polylineCoordinates);
-        polylines[id] = polyline;
-
-        }catch (e){
+          PolylineId id = PolylineId("poly");
+          Polyline polyline = Polyline(
+              polylineId: id, color: Colors.green, points: polylineCoordinates);
+          polylines[id] = polyline;
+        } catch (e) {
           print(e.toString());
         }
 
@@ -818,7 +1061,6 @@ class _PickUpOrder extends State<PickUpOrder> {
   }
 
   _getCurrentLocation() {
-
     Constants.currentlatlong().then((value) {
       setState(() {
         driver_lat = value!.latitude;
@@ -827,9 +1069,9 @@ class _PickUpOrder extends State<PickUpOrder> {
     });
   }
 
-
   static Future<void> openMap(double? latitude, double? longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     String urlAppleMaps = "https://maps.apple.com/?query=$latitude,$longitude";
     if (Platform.isAndroid) {
       if (await canLaunch(googleUrl)) {
