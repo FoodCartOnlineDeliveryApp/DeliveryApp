@@ -1538,7 +1538,7 @@ class _NewGetOrderKitchen extends State<NewGetOrderKitchen> {
                                           ],
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(top: 2),
+                                          margin: EdgeInsets.only(top: 2,right: 30),
                                           child: Text(vendorAddress,
                                               maxLines: 3,
                                               overflow: TextOverflow.visible,
@@ -1580,7 +1580,7 @@ class _NewGetOrderKitchen extends State<NewGetOrderKitchen> {
                                               color: Constants.greaytext,
                                               fontFamily: Constants.app_font,
                                               fontWeight: FontWeight.w700,
-                                              fontSize: 22,
+                                              fontSize: 12,
                                             ),
                                           ),
                                           Text(
@@ -1592,7 +1592,7 @@ class _NewGetOrderKitchen extends State<NewGetOrderKitchen> {
                                               color: Constants.color_theme,
                                               fontFamily: Constants.app_font,
                                               fontWeight: FontWeight.w700,
-                                              fontSize: 22,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ],

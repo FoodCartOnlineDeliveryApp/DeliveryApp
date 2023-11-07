@@ -118,7 +118,8 @@ class _History extends State<History> with SingleTickerProviderStateMixin {
         content: Text(Languages.of(context)!.servererrorlable),
         backgroundColor: Constants.color_red,
       );
-      Fluttertoast.showToast(msg:snackBar.toString());
+      Fluttertoast.showToast(msg:Languages.of(context)!.servererrorlable);
+      // Fluttertoast.showToast(msg:snackBar.toString());
       // _scaffoldKey.currentState!.showSnackBar(snackBar);
 
       print("error:$obj");

@@ -885,60 +885,60 @@ class _MyProfile extends State<MyProfile> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              top: 10,
-                                              left: 5,
-                                              bottom: 5,
-                                              right: 5),
-                                          child: Divider(
-                                            height: 1,
-                                            thickness: 0.5,
-                                            color: Constants.dashline,
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Language()));
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                                top: 10,
-                                                left: 5,
-                                                bottom: 10,
-                                                right: 5),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: SvgPicture.asset(
-                                                      "images/language.svg"),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 0,
-                                                      left: 20,
-                                                      bottom: 0,
-                                                      right: 5),
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    Languages.of(context)!
-                                                        .changemylanguagelable,
-                                                    style: TextStyle(
-                                                        color:
-                                                            Constants.whitetext,
-                                                        fontSize: 18,
-                                                        fontFamily:
-                                                            Constants.app_font),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                        // Container(
+                                        //   margin: EdgeInsets.only(
+                                        //       top: 10,
+                                        //       left: 5,
+                                        //       bottom: 5,
+                                        //       right: 5),
+                                        //   child: Divider(
+                                        //     height: 1,
+                                        //     thickness: 0.5,
+                                        //     color: Constants.dashline,
+                                        //   ),
+                                        // ),
+                                        // InkWell(
+                                        //   onTap: () {
+                                        //     Navigator.of(context).push(
+                                        //         MaterialPageRoute(
+                                        //             builder: (context) =>
+                                        //                 Language()));
+                                        //   },
+                                        //   child: Container(
+                                        //     margin: EdgeInsets.only(
+                                        //         top: 10,
+                                        //         left: 5,
+                                        //         bottom: 10,
+                                        //         right: 5),
+                                        //     child: Row(
+                                        //       children: [
+                                        //         Container(
+                                        //           alignment: Alignment.center,
+                                        //           child: SvgPicture.asset(
+                                        //               "images/language.svg"),
+                                        //         ),
+                                        //         Container(
+                                        //           margin: EdgeInsets.only(
+                                        //               top: 0,
+                                        //               left: 20,
+                                        //               bottom: 0,
+                                        //               right: 5),
+                                        //           alignment: Alignment.center,
+                                        //           child: Text(
+                                        //             Languages.of(context)!
+                                        //                 .changemylanguagelable,
+                                        //             style: TextStyle(
+                                        //                 color:
+                                        //                     Constants.whitetext,
+                                        //                 fontSize: 18,
+                                        //                 fontFamily:
+                                        //                     Constants.app_font),
+                                        //           ),
+                                        //         ),
+                                        //       ],
+                                        //     ),
+                                        //   ),
+                                        // ),
                                         Container(
                                           margin: EdgeInsets.only(
                                               top: 10,

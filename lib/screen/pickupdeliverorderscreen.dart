@@ -65,6 +65,8 @@ class _PickUpOrder extends State<PickUpOrder> {
   double CAMERA_TILT = 80;
   double CAMERA_BEARING = 30;
   bool cashCollected = false;
+  bool full = false;
+  bool full1 = false;
 
   @override
   void initState() {
@@ -295,7 +297,9 @@ class _PickUpOrder extends State<PickUpOrder> {
                               //   flex: 3,
                               AnimatedContainer(
                                 duration: Duration(milliseconds: 300),
-                                height: screenHeight * 0.3,
+                                height: !full
+                                    ? screenHeight * 0.3
+                                    : screenHeight * .96,
                                 child: Stack(
                                   children: [
                                     Container(
@@ -318,7 +322,7 @@ class _PickUpOrder extends State<PickUpOrder> {
                                           onMapCreated: onMapCreated),
                                     ),
                                     Container(
-                                      alignment: Alignment.topRight,
+                                      alignment: Alignment.topCenter,
                                       margin:
                                           EdgeInsets.only(right: 20, top: 10),
                                       child: ElevatedButton(
@@ -352,475 +356,525 @@ class _PickUpOrder extends State<PickUpOrder> {
                                         },
                                       ),
                                     ),
+                                    InkWell(
+                                      onTap: () {
+                                        print("expanded");
+                                        setState(() {
+                                          vi_footer = !vi_footer;
+                                          vi_combtn = !vi_combtn;
+                                          vi_address = !vi_address;
+                                          full = !full;
+                                          full1 = !full1;
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(.4),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 1.0,
+                                                color: Colors.black12),
+                                          ],
+                                        ),
+                                        height: 30,
+                                        width: 30,
+                                        alignment: Alignment.topLeft,
+                                        margin: EdgeInsets.only(
+                                          left: 20,
+                                          top: 20,
+                                          right: 0,
+                                        ),
+                                        child: Center(
+                                            child: Icon(full == true
+                                                ? Icons.zoom_in_map
+                                                : Icons.zoom_out_map)),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    vi_footer = true;
-                                    vi_combtn = false;
-                                    vi_address = true;
-                                  });
-                                },
-                                child: Visibility(
-                                  visible: vi_combtn,
-                                  child: Container(
-                                    alignment: Alignment.bottomRight,
-                                    margin: EdgeInsets.only(
-                                        left: 0, bottom: 5, right: 10),
-                                    child:
-                                        SvgPicture.asset("images/map_zoom.svg"),
-                                  ),
-                                ),
-                              ),
-                              SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
-                                child: Visibility(
-                                  visible: vi_address,
-                                  child: Container(
-                                    // height: ScreenUtil().setHeight(220),
-                                    margin: EdgeInsets.only(
-                                        left: 20, top: 10, bottom: 0),
-                                    color: Colors.transparent,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Builder(builder: (context) {
-                                                  final newOrderId = orderId;
-                                                  final prefixId =
-                                                      newOrderId.substring(
-                                                          0,
-                                                          newOrderId.length -
-                                                              4);
-                                                  final suffixId =
-                                                      newOrderId.substring(
-                                                          newOrderId.length -
-                                                              4);
-                                                  return RichText(
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textScaleFactor: 1,
-                                                    text: TextSpan(
-                                                      children: [
-                                                        WidgetSpan(
-                                                          child: Container(
-                                                            child: Text(
-                                                              Languages.of(
-                                                                          context)!
-                                                                      .oidlable +
-                                                                  "   " +
-                                                                  prefixId,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        WidgetSpan(
-                                                          child: Container(
-                                                            child: Text(
-                                                              suffixId,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .green,
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w900),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }),
-                                                // Container(
-                                                //   alignment: Alignment.topLeft,
-                                                //   child: Text(
-                                                //     Languages.of(context)!
-                                                //             .oidlable +
-                                                //         "   " +
-                                                //         orderId,
-                                                //     style: TextStyle(
-                                                //       color: Colors.white,
-                                                //       fontSize: 18,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                // Row(
-                                                //   children: [
-                                                //     Icon(Icons.call,
-                                                //         color: Colors.white),
-                                                //     SizedBox(width: 10),
-                                                //     Text(
-                                                //         PreferenceUtils
-                                                //             .getString(Constants
-                                                //                 .user_phone_no),
-                                                //         style: TextStyle(
-                                                //             color: Constants
-                                                //                 .whitetext,
-                                                //             fontSize: 16,
-                                                //             fontFamily: Constants
-                                                //                 .app_font_bold)),
-                                                //   ],
-                                                // ),
-                                              ],
-                                            ),
-                                            Container(
-                                              alignment: Alignment.center,
-                                              height: 30,
-                                              child: Text(
-                                                "${PreferenceUtils.getString(Constants.currencySymbol)}${PreferenceUtils.getString(Constants.previos_order_amount)}",
-                                                style: TextStyle(
-                                                    color: Constants.whitetext,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w800,
-                                                    fontFamily: Constants
-                                                        .app_font_bold),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  vi_footer = false;
-                                                  vi_combtn = true;
-                                                  vi_address = false;
-                                                });
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                  left: 0,
-                                                  bottom: 0,
-                                                  right: 10,
-                                                ),
-                                                child: SvgPicture.asset(
-                                                    "images/map_zoom.svg"),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  color: Constants.color_theme,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              alignment: Alignment.centerLeft,
-                                              height: 30,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10, vertical: 5),
-                                              child: Text(
-                                                PreferenceUtils.getString(
-                                                    Constants
-                                                        .previos_order_pay_type),
-                                                style: TextStyle(
-                                                    color: Constants.whitetext,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w800,
-                                                    fontFamily: Constants
-                                                        .app_font_bold),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                          height: ScreenUtil().setHeight(130),
-                                          margin: EdgeInsets.only(top: 20),
-                                          child: ListView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount: 2,
-                                              itemBuilder: (con, index) {
-                                                double linetop = 0;
-                                                double dottop = 0;
-                                                double statustop = 0;
-                                                Color? color;
-                                                Color dotcolor;
-
-                                                if (index == 0) {
-                                                  dotcolor =
-                                                      Constants.color_theme;
-                                                }
-
-                                                if (index == 1) {
-                                                  linetop = -30.0;
-                                                  dottop = -42.0;
-                                                  statustop = -35.0;
-                                                  color = Constants.color_theme;
-                                                  dotcolor =
-                                                      Constants.color_theme;
-                                                }
-
-                                                return index != 0
-                                                    ? Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
+                              // InkWell(
+                              //   onTap: () {
+                              //     setState(() {
+                              //       vi_footer = true;
+                              //       vi_combtn = false;
+                              //       vi_address = true;
+                              //       full = false;
+                              //       full1 = true;
+                              //     });
+                              //   },
+                              //   child: Visibility(
+                              //     visible: vi_combtn,
+                              //     child: Container(
+                              //       alignment: Alignment.bottomRight,
+                              //       margin: EdgeInsets.only(
+                              //           left: 0, bottom: 5, right: 10),
+                              //       child:
+                              //           SvgPicture.asset("images/map_zoom.svg"),
+                              //     ),
+                              //   ),
+                              // ),
+                              if (!full)
+                                SingleChildScrollView(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  child: Visibility(
+                                    visible: vi_address,
+                                    child: Container(
+                                      // height: ScreenUtil().setHeight(220),
+                                      margin: EdgeInsets.only(
+                                          left: 20, top: 10, bottom: 0),
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Builder(builder: (context) {
+                                                    final newOrderId = orderId;
+                                                    final prefixId =
+                                                        newOrderId.substring(
+                                                            0,
+                                                            newOrderId.length -
+                                                                4);
+                                                    final suffixId =
+                                                        newOrderId.substring(
+                                                            newOrderId.length -
+                                                                4);
+                                                    return RichText(
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textScaleFactor: 1,
+                                                      text: TextSpan(
                                                         children: [
-                                                            Row(children: [
-                                                              Column(
-                                                                children: List
-                                                                    .generate(
-                                                                  4,
-                                                                  (ii) =>
-                                                                      Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: 9,
-                                                                        right:
-                                                                            10,
-                                                                        top: 0,
-                                                                        bottom:
-                                                                            0),
-                                                                    child:
-                                                                        Container(
-                                                                      transform: Matrix4.translationValues(
-                                                                          1.0,
-                                                                          linetop,
-                                                                          0.0),
-                                                                      height:
-                                                                          20,
-                                                                      width: 2,
-                                                                      color:
-                                                                          color,
+                                                          WidgetSpan(
+                                                            child: Container(
+                                                              child: Text(
+                                                                Languages.of(
+                                                                            context)!
+                                                                        .oidlable +
+                                                                    "   " +
+                                                                    prefixId,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        20,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          WidgetSpan(
+                                                            child: Container(
+                                                              child: Text(
+                                                                suffixId,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    fontSize:
+                                                                        20,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w900),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }),
+                                                  // Container(
+                                                  //   alignment: Alignment.topLeft,
+                                                  //   child: Text(
+                                                  //     Languages.of(context)!
+                                                  //             .oidlable +
+                                                  //         "   " +
+                                                  //         orderId,
+                                                  //     style: TextStyle(
+                                                  //       color: Colors.white,
+                                                  //       fontSize: 18,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  // Row(
+                                                  //   children: [
+                                                  //     Icon(Icons.call,
+                                                  //         color: Colors.white),
+                                                  //     SizedBox(width: 10),
+                                                  //     Text(
+                                                  //         PreferenceUtils
+                                                  //             .getString(Constants
+                                                  //                 .user_phone_no),
+                                                  //         style: TextStyle(
+                                                  //             color: Constants
+                                                  //                 .whitetext,
+                                                  //             fontSize: 16,
+                                                  //             fontFamily: Constants
+                                                  //                 .app_font_bold)),
+                                                  //   ],
+                                                  // ),
+                                                ],
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                height: 30,
+                                                margin:
+                                                    EdgeInsets.only(right: 15),
+                                                child: Text(
+                                                  "${PreferenceUtils.getString(Constants.currencySymbol)}${PreferenceUtils.getString(Constants.previos_order_amount)}",
+                                                  style: TextStyle(
+                                                      color:
+                                                          Constants.whitetext,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontFamily: Constants
+                                                          .app_font_bold),
+                                                ),
+                                              ),
+                                              // InkWell(
+                                              //   onTap: () {
+                                              //     setState(() {
+                                              //       vi_footer = false;
+                                              //       vi_combtn = true;
+                                              //       vi_address = false;
+                                              //     });
+                                              //   },
+                                              //   child: Container(
+                                              //     margin: EdgeInsets.only(
+                                              //       left: 0,
+                                              //       bottom: 0,
+                                              //       right: 10,
+                                              //     ),
+                                              //     child: SvgPicture.asset(
+                                              //         "images/map_zoom.svg"),
+                                              //   ),
+                                              // ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        Constants.color_theme,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                alignment: Alignment.centerLeft,
+                                                height: 30,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 5),
+                                                child: Text(
+                                                  PreferenceUtils.getString(
+                                                      Constants
+                                                          .previos_order_pay_type),
+                                                  style: TextStyle(
+                                                      color:
+                                                          Constants.whitetext,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      fontFamily: Constants
+                                                          .app_font_bold),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            height: ScreenUtil().setHeight(130),
+                                            margin: EdgeInsets.only(top: 20),
+                                            child: ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemCount: 2,
+                                                itemBuilder: (con, index) {
+                                                  double linetop = 0;
+                                                  double dottop = 0;
+                                                  double statustop = 0;
+                                                  Color? color;
+                                                  Color dotcolor;
+
+                                                  if (index == 0) {
+                                                    dotcolor =
+                                                        Constants.color_theme;
+                                                  }
+
+                                                  if (index == 1) {
+                                                    linetop = -30.0;
+                                                    dottop = -42.0;
+                                                    statustop = -35.0;
+                                                    color =
+                                                        Constants.color_theme;
+                                                    dotcolor =
+                                                        Constants.color_theme;
+                                                  }
+
+                                                  return index != 0
+                                                      ? Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                              Row(children: [
+                                                                Column(
+                                                                  children: List
+                                                                      .generate(
+                                                                    4,
+                                                                    (ii) =>
+                                                                        Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left:
+                                                                              9,
+                                                                          right:
+                                                                              10,
+                                                                          top:
+                                                                              0,
+                                                                          bottom:
+                                                                              0),
+                                                                      child:
+                                                                          Container(
+                                                                        transform: Matrix4.translationValues(
+                                                                            1.0,
+                                                                            linetop,
+                                                                            0.0),
+                                                                        height:
+                                                                            20,
+                                                                        width:
+                                                                            2,
+                                                                        color:
+                                                                            color,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                height: 0.5,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .only(
-                                                                  left: 10,
-                                                                  right: 20,
-                                                                ),
-                                                              ))
-                                                            ]),
-                                                            Row(children: [
-                                                              Container(
-                                                                transform: Matrix4
-                                                                    .translationValues(
-                                                                        3.0,
-                                                                        dottop,
-                                                                        0.0),
-                                                                child: SvgPicture
-                                                                    .asset(
-                                                                        "images/kitchen.svg"),
-                                                              ),
-                                                              Expanded(
-                                                                child:
-                                                                    Container(
-                                                                  height: 50,
+                                                                Expanded(
+                                                                    child:
+                                                                        Container(
                                                                   color: Colors
                                                                       .transparent,
+                                                                  height: 0.5,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .only(
+                                                                    left: 10,
+                                                                    right: 20,
+                                                                  ),
+                                                                ))
+                                                              ]),
+                                                              Row(children: [
+                                                                Container(
                                                                   transform: Matrix4
                                                                       .translationValues(
-                                                                          20.0,
-                                                                          statustop,
+                                                                          3.0,
+                                                                          dottop,
                                                                           0.0),
+                                                                  child: SvgPicture
+                                                                      .asset(
+                                                                          "images/kitchen.svg"),
+                                                                ),
+                                                                Expanded(
                                                                   child:
-                                                                      ListView(
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    physics:
-                                                                        NeverScrollableScrollPhysics(),
-                                                                    children: [
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Text(
-                                                                              username,
-                                                                              style: TextStyle(color: Constants.whitetext, fontSize: 16, fontFamily: Constants.app_font_bold)),
-                                                                          Container(
-                                                                            margin:
-                                                                                EdgeInsets.only(right: 35),
-                                                                            child:
-                                                                                RichText(
-                                                                              maxLines: 2,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              textScaleFactor: 1,
-                                                                              text: TextSpan(
-                                                                                children: [
-                                                                                  WidgetSpan(
-                                                                                    child: Container(
-                                                                                      margin: EdgeInsets.only(left: 5, top: 0, bottom: 0, right: 5),
-                                                                                      child: SvgPicture.asset(
-                                                                                        "images/location.svg",
-                                                                                        width: 13,
-                                                                                        height: 13,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  WidgetSpan(
-                                                                                    child: Container(
-                                                                                      margin: EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 5),
-                                                                                      child: Text(
-                                                                                        user_distance + " " + Languages.of(context)!.kmfarawaylable,
-                                                                                        maxLines: 4,
-                                                                                        style: TextStyle(
-                                                                                          color: Constants.whitetext,
-                                                                                          fontSize: 12,
-                                                                                          fontFamily: Constants.app_font,
+                                                                      Container(
+                                                                    height: 50,
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    transform: Matrix4
+                                                                        .translationValues(
+                                                                            20.0,
+                                                                            statustop,
+                                                                            0.0),
+                                                                    child:
+                                                                        ListView(
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      physics:
+                                                                          NeverScrollableScrollPhysics(),
+                                                                      children: [
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Text(username,
+                                                                                style: TextStyle(color: Constants.whitetext, fontSize: 16, fontFamily: Constants.app_font_bold)),
+                                                                            Container(
+                                                                              margin: EdgeInsets.only(right: 35),
+                                                                              child: RichText(
+                                                                                maxLines: 2,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                textScaleFactor: 1,
+                                                                                text: TextSpan(
+                                                                                  children: [
+                                                                                    WidgetSpan(
+                                                                                      child: Container(
+                                                                                        margin: EdgeInsets.only(left: 5, top: 0, bottom: 0, right: 5),
+                                                                                        child: SvgPicture.asset(
+                                                                                          "images/location.svg",
+                                                                                          width: 13,
+                                                                                          height: 13,
                                                                                         ),
                                                                                       ),
                                                                                     ),
-                                                                                  ),
-                                                                                ],
+                                                                                    WidgetSpan(
+                                                                                      child: Container(
+                                                                                        margin: EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 5),
+                                                                                        child: Text(
+                                                                                          user_distance + " " + Languages.of(context)!.kmfarawaylable,
+                                                                                          maxLines: 4,
+                                                                                          style: TextStyle(
+                                                                                            color: Constants.whitetext,
+                                                                                            fontSize: 12,
+                                                                                            fontFamily: Constants.app_font,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            top:
-                                                                                2),
-                                                                        child: Text(
-                                                                            useraddress,
-                                                                            maxLines:
-                                                                                3,
-                                                                            overflow: TextOverflow
-                                                                                .visible,
-                                                                            style: TextStyle(
-                                                                                color: Constants.whitetext,
-                                                                                fontSize: 12,
-                                                                                fontFamily: Constants.app_font)),
-                                                                      ),
-                                                                    ],
+                                                                          ],
+                                                                        ),
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.only(top: 2),
+                                                                          child: Text(
+                                                                              useraddress,
+                                                                              maxLines: 3,
+                                                                              overflow: TextOverflow.visible,
+                                                                              style: TextStyle(color: Constants.whitetext, fontSize: 12, fontFamily: Constants.app_font)),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              )
+                                                                )
+                                                              ])
                                                             ])
-                                                          ])
-                                                    : Row(children: [
-                                                        Container(
-                                                          transform: Matrix4
-                                                              .translationValues(
-                                                                  2.0,
-                                                                  -12,
-                                                                  0.0),
-                                                          child: SvgPicture.asset(
-                                                              "images/map.svg",
-                                                              width: 20,
-                                                              height: 20),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            height: 55,
-                                                            color: Colors
-                                                                .transparent,
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                                    left: 20,
-                                                                    top: 0,
-                                                                    right: 10),
-                                                            child: ListView(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  NeverScrollableScrollPhysics(),
-                                                              children: [
-                                                                Text(vendorname,
-                                                                    style: TextStyle(
-                                                                        color: Constants
-                                                                            .whitetext,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontFamily:
-                                                                            Constants.app_font_bold)),
-                                                                Text(
-                                                                    vendorAddress,
-                                                                    maxLines: 3,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .visible,
-                                                                    style: TextStyle(
-                                                                        color: Constants
-                                                                            .whitetext,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            Constants.app_font)),
-                                                              ],
-                                                            ),
+                                                      : Row(children: [
+                                                          Container(
+                                                            transform: Matrix4
+                                                                .translationValues(
+                                                                    2.0,
+                                                                    -12,
+                                                                    0.0),
+                                                            child: SvgPicture.asset(
+                                                                "images/map.svg",
+                                                                width: 20,
+                                                                height: 20),
                                                           ),
-                                                        )
-                                                      ]);
-                                              }),
-                                        ),
-                                      ],
+                                                          Expanded(
+                                                            child: Container(
+                                                              height: 55,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      left: 20,
+                                                                      top: 0,
+                                                                      right:
+                                                                          10),
+                                                              child: ListView(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                children: [
+                                                                  Text(
+                                                                      vendorname,
+                                                                      style: TextStyle(
+                                                                          color: Constants
+                                                                              .whitetext,
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontFamily:
+                                                                              Constants.app_font_bold)),
+                                                                  Text(vendorAddress,
+                                                                      maxLines:
+                                                                          3,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .visible,
+                                                                      style: TextStyle(
+                                                                          color: Constants
+                                                                              .whitetext,
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontFamily:
+                                                                              Constants.app_font)),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ]);
+                                                }),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Builder(builder: (context) {
-                                  final encode = PreferenceUtils.getString(
-                                      Constants.previos_order_items);
-                                  final decode = jsonDecode(encode);
-                                  List<OrderItems> orderItems = <OrderItems>[];
-                                  decode.forEach((v) {
-                                    orderItems.add(OrderItems.fromJson(v));
-                                  });
+                              if (!full)
+                                Flexible(
+                                  flex: 2,
+                                  child: Builder(builder: (context) {
+                                    final encode = PreferenceUtils.getString(
+                                        Constants.previos_order_items);
+                                    final decode = jsonDecode(encode);
+                                    List<OrderItems> orderItems =
+                                        <OrderItems>[];
+                                    decode.forEach((v) {
+                                      orderItems.add(OrderItems.fromJson(v));
+                                    });
 
-                                  return ListView.builder(
-                                    itemCount: orderItems.length,
-                                    shrinkWrap: true,
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    itemBuilder: (context, position) {
-                                      return Container(
-                                        margin:
-                                            EdgeInsets.only(top: 10, left: 15),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              orderItems[position].itemName!,
-                                              style: TextStyle(
-                                                color: Constants.greaytext,
-                                                fontFamily: Constants.app_font,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 22,
+                                    return ListView.builder(
+                                      itemCount: orderItems.length,
+                                      shrinkWrap: true,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemBuilder: (context, position) {
+                                        return Container(
+                                          margin: EdgeInsets.only(
+                                              top: 10, left: 15),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                orderItems[position].itemName!,
+                                                style: TextStyle(
+                                                  color: Constants.greaytext,
+                                                  fontFamily:
+                                                      Constants.app_font,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 12,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              "  x " +
-                                                  orderItems[position]
-                                                      .qty
-                                                      .toString(),
-                                              style: TextStyle(
-                                                color: Constants.color_theme,
-                                                fontFamily: Constants.app_font,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 22,
+                                              Text(
+                                                "  x " +
+                                                    orderItems[0]
+                                                        .qty
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  color: Constants.color_theme,
+                                                  fontFamily:
+                                                      Constants.app_font,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 12,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }),
-                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }),
+                                ),
                               // if (PreferenceUtils.getString(
                               //             Constants.previos_order_pay_type)
                               //         .toUpperCase() ==
@@ -828,142 +882,190 @@ class _PickUpOrder extends State<PickUpOrder> {
                               //   SizedBox(
                               //     height: 15,
                               //   ),
-                              if (PreferenceUtils.getString(
-                                          Constants.previos_order_pay_type)
-                                      .toUpperCase() ==
-                                  "COD")
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Cash collected",
-                                        style: TextStyle(
-                                            fontFamily: Constants.app_font,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                            fontSize: 26.0),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Checkbox(
-                                            activeColor: Colors.transparent,
-                                            fillColor:
-                                                MaterialStateColor.resolveWith(
-                                                    (states) =>
-                                                        Constants.color_theme),
-                                            checkColor: Constants.whitetext,
-                                            overlayColor:
-                                                MaterialStateColor.resolveWith(
-                                                    (states) => Colors.white),
-                                            materialTapTargetSize:
-                                                MaterialTapTargetSize.padded,
-                                            value: cashCollected,
-                                            onChanged: (val) {
-                                              setState(() {
-                                                cashCollected = val!;
-                                              });
-                                            }),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              if (PreferenceUtils.getString(
-                                          Constants.previos_order_pay_type)
-                                      .toUpperCase() ==
-                                  "COD")
-                                SizedBox(
-                                  height: 25,
-                                ),
+                              // if (PreferenceUtils.getString(
+                              //             Constants.previos_order_pay_type)
+                              //         .toUpperCase() ==
+                              //     "COD")
+                              //   if (!full)
+                              //     Flexible(
+                              //       flex: 2,
+                              //       child: Row(
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.center,
+                              //         crossAxisAlignment:
+                              //             CrossAxisAlignment.center,
+                              //         children: [
+                              //           Text(
+                              //             "Cash collected",
+                              //             style: TextStyle(
+                              //                 fontFamily: Constants.app_font,
+                              //                 fontWeight: FontWeight.w700,
+                              //                 color: Colors.white,
+                              //                 fontSize: 26.0),
+                              //           ),
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Checkbox(
+                              //                 activeColor: Colors.transparent,
+                              //                 fillColor: MaterialStateColor
+                              //                     .resolveWith((states) =>
+                              //                         Constants.color_theme),
+                              //                 checkColor: Constants.whitetext,
+                              //                 overlayColor: MaterialStateColor
+                              //                     .resolveWith(
+                              //                         (states) => Colors.white),
+                              //                 materialTapTargetSize:
+                              //                     MaterialTapTargetSize.padded,
+                              //                 value: cashCollected,
+                              //                 onChanged: (val) {
+                              //                   setState(() {
+                              //                     cashCollected = val!;
+                              //                   });
+                              //                 }),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              // if (PreferenceUtils.getString(
+                              //             Constants.previos_order_pay_type)
+                              //         .toUpperCase() ==
+                              //     "COD")
+                              //   if(!full)SizedBox(
+                              //     height: 25,
+                              //   ),
                             ],
                           ),
                         ),
-                        Visibility(
-                            visible: vi_footer,
-                            child: new Container(
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 20),
-                                  child: IgnorePointer(
-                                    ignoring: !cashCollected,
-                                    child: SlideAction(
-                                      text: Languages.of(context)!
-                                          .completeorderlable,
-                                      textStyle: TextStyle(
-                                          fontFamily: Constants.app_font,
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 22,
-                                          color: Colors.white),
-                                      // borderRadius: 10,
-                                      height: 50,
-                                      alignment: Alignment.bottomCenter,
-                                      sliderButtonIconSize: 30,
-                                      outerColor: cashCollected
-                                          ? Constants.color_theme
-                                          : Colors.grey,
-                                      sliderButtonIconPadding: 5,
-                                      onSubmit: () {
-                                        if (cashCollected) {
-                                          print("Picked Up");
-                                          Constants.CheckNetwork().whenComplete(
-                                              () => CallApiForDeliverorder(
-                                                  this.context));
-                                          PreferenceUtils.setString(
-                                              'pickup_btn_status', "pickup");
-                                        } else {
-                                          print("Collect cash");
-                                        }
-                                        // Constants.CheckNetwork().whenComplete(
-                                        //     () => CallApiForPickUporder(context));
-                                        // setReachDestBtnStatus(true);
-                                      },
-                                    ),
+                        if (PreferenceUtils.getString(
+                                    Constants.previos_order_pay_type)
+                                .toUpperCase() ==
+                            "COD")
+                          if (!full)
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              margin: EdgeInsets.only(bottom: 60),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Cash collected",
+                                    style: TextStyle(
+                                        fontFamily: Constants.app_font,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                        fontSize: 26.0),
                                   ),
-                                  // child: InkWell(
-                                  //   onTap: () {
-                                  //     Constants.CheckNetwork().whenComplete(
-                                  //         () => CallApiForDeliverorder(
-                                  //             this.context));
-                                  //   },
-                                  //   child: Container(
-                                  //       margin: EdgeInsets.only(
-                                  //           left: 0, right: 0, bottom: 0),
-                                  //       decoration: BoxDecoration(
-                                  //         borderRadius:
-                                  //             BorderRadius.circular(0.0),
-                                  //         color: Constants.color_theme,
-                                  //         boxShadow: [
-                                  //           BoxShadow(
-                                  //             color: Colors.grey,
-                                  //             offset: Offset(0.0, 0.0),
-                                  //             //(x,y)
-                                  //             blurRadius: 0.0,
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //       height: screenHeight * 0.08,
-                                  //       child: Center(
-                                  //         child: Container(
-                                  //           color: Constants.color_theme,
-                                  //           child: Text(
-                                  //             Languages.of(context)!
-                                  //                 .completeorderlable,
-                                  //             style: TextStyle(
-                                  //                 color: Colors.white,
-                                  //                 fontSize: 16,
-                                  //                 fontFamily:
-                                  //                     Constants.app_font),
-                                  //           ),
-                                  //         ),
-                                  //       )),
-                                  // ),
-                                ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Checkbox(
+                                        activeColor: Colors.transparent,
+                                        fillColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) =>
+                                                    Constants.color_theme),
+                                        checkColor: Constants.whitetext,
+                                        overlayColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.white),
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.padded,
+                                        value: cashCollected,
+                                        onChanged: (val) {
+                                          setState(() {
+                                            cashCollected = val!;
+                                          });
+                                        }),
+                                  ),
+                                ],
                               ),
-                            )),
+                            ),
+                        if (!full)
+                          Visibility(
+                              visible: vi_footer,
+                              child: new Container(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, bottom: 20),
+                                    child: IgnorePointer(
+                                      ignoring: !cashCollected,
+                                      child: SlideAction(
+                                        text: Languages.of(context)!
+                                            .completeorderlable,
+                                        textStyle: TextStyle(
+                                            fontFamily: Constants.app_font,
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 22,
+                                            color: Colors.white),
+                                        // borderRadius: 10,
+                                        height: 50,
+                                        alignment: Alignment.bottomCenter,
+                                        sliderButtonIconSize: 30,
+                                        outerColor: cashCollected
+                                            ? Constants.color_theme
+                                            : Colors.grey,
+                                        sliderButtonIconPadding: 5,
+                                        onSubmit: () {
+                                          if (cashCollected) {
+                                            print("Picked Up");
+                                            Constants.CheckNetwork()
+                                                .whenComplete(() =>
+                                                    CallApiForDeliverorder(
+                                                        this.context));
+                                            PreferenceUtils.setString(
+                                                'pickup_btn_status', "pickup");
+                                          } else {
+                                            print("Collect cash");
+                                          }
+                                          // Constants.CheckNetwork().whenComplete(
+                                          //     () => CallApiForPickUporder(context));
+                                          // setReachDestBtnStatus(true);
+                                        },
+                                      ),
+                                    ),
+                                    // child: InkWell(
+                                    //   onTap: () {
+                                    //     Constants.CheckNetwork().whenComplete(
+                                    //         () => CallApiForDeliverorder(
+                                    //             this.context));
+                                    //   },
+                                    //   child: Container(
+                                    //       margin: EdgeInsets.only(
+                                    //           left: 0, right: 0, bottom: 0),
+                                    //       decoration: BoxDecoration(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(0.0),
+                                    //         color: Constants.color_theme,
+                                    //         boxShadow: [
+                                    //           BoxShadow(
+                                    //             color: Colors.grey,
+                                    //             offset: Offset(0.0, 0.0),
+                                    //             //(x,y)
+                                    //             blurRadius: 0.0,
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //       height: screenHeight * 0.08,
+                                    //       child: Center(
+                                    //         child: Container(
+                                    //           color: Constants.color_theme,
+                                    //           child: Text(
+                                    //             Languages.of(context)!
+                                    //                 .completeorderlable,
+                                    //             style: TextStyle(
+                                    //                 color: Colors.white,
+                                    //                 fontSize: 16,
+                                    //                 fontFamily:
+                                    //                     Constants.app_font),
+                                    //           ),
+                                    //         ),
+                                    //       )),
+                                    // ),
+                                  ),
+                                ),
+                              )),
                       ],
                     );
                   },
